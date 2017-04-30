@@ -18,6 +18,7 @@ import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
+import pokeyelp.grat.team.pokemonyelp.activity_home.HomeActivity;
 import pokeyelp.grat.team.pokemonyelp.activity_sample.SampleActivity;
 import pokeyelp.grat.team.pokemonyelp.constants.Api;
 import pokeyelp.grat.team.pokemonyelp.singleton.MrSingleton;
@@ -114,7 +115,7 @@ public class LoadingActivity extends AppCompatActivity {
             if (accessToken != null) {
 
                 //Launch a second activity and pass the token to the singleton
-                Intent intent = new Intent(LoadingActivity.this, SampleActivity.class);
+                Intent intent = new Intent(LoadingActivity.this, HomeActivity.class);
                 MrSingleton.getInstance().setToken(accessToken);
                 startActivity(intent);
                 //once we move to the next activity, we don't need this loading screen anymore, so let's kill it.
