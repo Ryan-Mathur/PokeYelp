@@ -1,0 +1,4 @@
+<resources>
+    <string name="app_name">Pokemon Yelp</string>
+    <string name="search_button_name">Search</string>
+</resources>
