@@ -7,6 +7,17 @@
     android:layout_height="match_parent"
     tools:context="pokeyelp.grat.team.pokemonyelp.activity_home.HomeActivity">
 
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/home_activity_recycler_View"
+        android:layout_width="368dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_marginTop="8dp"
+        android:layout_marginLeft="8dp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        android:layout_marginRight="8dp"
+        app:layout_constraintRight_toRightOf="parent"/>
+
     <Button
         android:id="@+id/search_button"
         android:layout_width="wrap_content"

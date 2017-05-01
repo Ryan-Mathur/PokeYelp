@@ -8,6 +8,8 @@ import android.nfc.Tag;
 import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -17,6 +19,7 @@ import com.google.gson.Gson;
 
 import java.io.IOException;
 import java.nio.Buffer;
+import java.util.ArrayList;
 
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -24,13 +27,16 @@ import okhttp3.Response;
 import pokeyelp.grat.team.pokemonyelp.LoadingActivity;
 import pokeyelp.grat.team.pokemonyelp.R;
 import pokeyelp.grat.team.pokemonyelp.activity_search.SearchActivity;
+import pokeyelp.grat.team.pokemonyelp.activity_search.SearchViewAdapter;
 import pokeyelp.grat.team.pokemonyelp.constants.Api;
 import pokeyelp.grat.team.pokemonyelp.gson_yelp.ApiResult;
+import pokeyelp.grat.team.pokemonyelp.gson_yelp.Business;
 import pokeyelp.grat.team.pokemonyelp.singleton.MrSingleton;
 
 public class HomeActivity extends AppCompatActivity {
     private String mGetYelpTokenMain;
-
+    //recycler adapter here because we need to call it inside the asynctask to update it's list
+    private SearchViewAdapter mAdapter;
 
 
     @Override
@@ -48,9 +54,9 @@ public class HomeActivity extends AppCompatActivity {
             mGetYelpTokenMain = MrSingleton.getInstance().getToken();
 
             //Start async task of getting businesses
-            //// TODO: 5/1/17 create async task in different method
+            //// TODO: get current location for query
             yelpBusinessesForMain yelpBusinessesForMain = new yelpBusinessesForMain();
-            yelpBusinessesForMain.execute(Api.YELP_BASE_URL + "businesses/search?latitude=40.740108&longitude=-73.990196");
+            yelpBusinessesForMain.execute(Api.YELP_BASE_URL + "businesses/search?latitude=40.740108&longitude=-73.990196&limit=10");
 
 
         } else {
@@ -69,6 +75,18 @@ public class HomeActivity extends AppCompatActivity {
                 v.getContext().startActivity(intent);
             }
         });
+
+        //setting up the recycler view
+        RecyclerView recyclerView = (RecyclerView) findViewById(R.id.home_activity_recycler_View);
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(HomeActivity.this, LinearLayoutManager.VERTICAL, false);
+
+        //because we are running an asynctask in the background, we don't know WHEN we are going to get
+        //the list to give to the recycler adapter. So here, I'm just giving it an empty list, as a placeholder.
+        mAdapter = new SearchViewAdapter(new ArrayList<Business>());
+
+        //more setup for the recycler view
+        recyclerView.setLayoutManager(linearLayoutManager);
+        recyclerView.setAdapter(mAdapter);
 
 
     }
@@ -116,7 +134,18 @@ public class HomeActivity extends AppCompatActivity {
 
             return null;
         }
-    }
 
+        @Override
+        protected void onPostExecute(ApiResult apiResult) {
+            super.onPostExecute(apiResult);
+            if (apiResult!=null){
+                //because we now have a real list of businesses to give to the recycler adapter, we
+                //are replacing its current list with this new list that we got from our API call.
+                mAdapter.giveNewSearchList(apiResult.getBusinesses());
+            } else {
+                Toast.makeText(HomeActivity.this, "Please type something valid", Toast.LENGTH_SHORT).show();
+            }
+        }
+    }
 
 }
