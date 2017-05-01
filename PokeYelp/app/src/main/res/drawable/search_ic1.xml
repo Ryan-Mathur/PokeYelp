@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item android:drawable="@drawable/ic_action_search"/>
+    <item>
+    <shape
+
+        android:shape="rectangle">
+        <corners android:radius="3dp" />
+        <stroke android:width="5px" android:color="#c70e20"
+            />
+    </shape>
+</item>
+
+</layer-list>
