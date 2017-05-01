@@ -1,0 +1,9 @@
+package pokeyelp.grat.team.pokemonyelp.constants;
+
+/**
+ * Created by twang on 5/1/17.
+ */
+
+public class Pokemon {
+    public static final int POKEMON_NUMBERS = 720;
+}

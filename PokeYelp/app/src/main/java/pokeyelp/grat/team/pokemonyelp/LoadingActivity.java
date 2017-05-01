@@ -97,10 +97,10 @@ public class LoadingActivity extends AppCompatActivity {
             //these are all the possible exceptions, I didn't really do much with this except insult the user.
             catch (IOException e) {
                 e.printStackTrace();
-                Toast.makeText(LoadingActivity.this, "I can't do this shit", Toast.LENGTH_SHORT).show();
+                //Toast.makeText(LoadingActivity.this, "I can't do this shit", Toast.LENGTH_SHORT).show();
             } catch (JSONException e) {
                 e.printStackTrace();
-                Toast.makeText(LoadingActivity.this, "That's some bad J, son!", Toast.LENGTH_SHORT).show();
+                //Toast.makeText(LoadingActivity.this, "That's some bad J, son!", Toast.LENGTH_SHORT).show();
             }
 
             //returns a null value if something went wrong, like if an exception was thrown
@@ -116,6 +116,7 @@ public class LoadingActivity extends AppCompatActivity {
 
                 //Launch a second activity and pass the token to the singleton
                 Intent intent = new Intent(LoadingActivity.this, HomeActivity.class);
+                System.out.println(accessToken);
                 MrSingleton.getInstance().setToken(accessToken);
                 startActivity(intent);
                 //once we move to the next activity, we don't need this loading screen anymore, so let's kill it.

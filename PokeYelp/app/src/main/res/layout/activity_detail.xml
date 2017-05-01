@@ -1,10 +1,31 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout
+<LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     tools:context="pokeyelp.grat.team.pokemonyelp.activity_detail.DetailActivity">
 
-</android.support.constraint.ConstraintLayout>
+    <TextView
+        android:id="@+id/detail_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Name"/>
+
+    <TextView
+        android:id="@+id/detail_adress"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Address"/>
+
+    <TextView
+        android:id="@+id/detail_button_scan_pokemon"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="10dp"
+        android:visibility="invisible"
+        android:text="Scan for Pokemon"/>
+
+</LinearLayout>
