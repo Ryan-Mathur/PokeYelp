@@ -8,6 +8,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import com.google.gson.Gson;
 
@@ -48,7 +49,12 @@ public class SearchActivity extends AppCompatActivity {
             public void onClick(View v) {
 
                 String location= searchByLoacationInput.getText().toString();
+
+                //if it is empty, give a random location for now, later need a currentlocation
                 String categories=searchByNameInput.getText().toString();
+
+
+
                 mGetYelp = new GetYelpBusinesses();
 
                 //this query can be changed to anything we want
@@ -97,10 +103,13 @@ public class SearchActivity extends AppCompatActivity {
                 //the data from the JSON response. Check out the classes in the yelp folder to see
                 //all the stuff we've got to work with. It's a lot!!
                 ApiResult results = gson.fromJson(response.body().string(), ApiResult.class);
+                results.getBusinesses().size();
                 //starts the onPostExecute method, and gives it the ApiResult object
                 return results;
 
             } catch (IOException e) {
+                e.printStackTrace();
+            } catch (NullPointerException e){
                 e.printStackTrace();
             }
 
@@ -114,6 +123,8 @@ public class SearchActivity extends AppCompatActivity {
                 //because we now have a real list of businesses to give to the recycler adapter, we
                 //are replacing its current list with this new list that we got from our API call.
                 mAdapter.giveNewSearchList(apiResult.getBusinesses());
+            } else {
+                Toast.makeText(SearchActivity.this, "Please type something valid", Toast.LENGTH_SHORT).show();
             }
 
         }
