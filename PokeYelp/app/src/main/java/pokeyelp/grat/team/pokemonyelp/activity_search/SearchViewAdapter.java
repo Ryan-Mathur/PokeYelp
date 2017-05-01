@@ -39,7 +39,7 @@ public class SearchViewAdapter extends RecyclerView.Adapter<SearchViewHolder> {
 
         holder.mCompanyName.setText(currentBusiness.getName());
         holder.mAddress.setText(currentBusiness.getLocation().getAddress1());
-        holder.mRating.setText(String.valueOf(currentBusiness.getRating()));
+        holder.mReview.setText(String.valueOf(currentBusiness.getReviewCount()));
 
         Picasso.with(holder.mBusinessPhoto.getContext()).load(currentBusiness.getImageUrl())
                 .resize(200, 200).into(holder.mBusinessPhoto);
