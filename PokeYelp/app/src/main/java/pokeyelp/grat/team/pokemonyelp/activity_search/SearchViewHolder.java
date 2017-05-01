@@ -1,0 +1,30 @@
+package pokeyelp.grat.team.pokemonyelp.activity_search;
+
+import android.support.v7.widget.RecyclerView;
+import android.view.View;
+import android.widget.ImageView;
+import android.widget.TextView;
+
+import pokeyelp.grat.team.pokemonyelp.R;
+
+/**
+ * Created by Galen on 5/1/17.
+ */
+
+public class SearchViewHolder extends RecyclerView.ViewHolder {
+
+    public TextView mCompanyName, mAddress, mRating;
+    public ImageView mBusinessPhoto, mRatingView, mYelpLogo;
+    View mRootView;
+
+    public SearchViewHolder(View itemView) {
+        super(itemView);
+        mCompanyName = (TextView) itemView.findViewById(R.id.search_business_name);
+        mAddress = (TextView) itemView.findViewById(R.id.search_address);
+        mRating = (TextView) itemView.findViewById(R.id.search_numbofratings);
+        mBusinessPhoto= (ImageView) itemView.findViewById(R.id.search_imageview);
+        mRatingView = (ImageView) itemView.findViewById(R.id.search_fivestars);
+        mYelpLogo= (ImageView) itemView.findViewById(R.id.search_yelplogo);
+        mRootView=itemView.findViewById(R.id.root_view_for_search_list);
+    }
+}
