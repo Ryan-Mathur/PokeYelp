@@ -37,6 +37,7 @@ import pokeyelp.grat.team.pokemonyelp.R;
 import pokeyelp.grat.team.pokemonyelp.constants.Api;
 import pokeyelp.grat.team.pokemonyelp.gson_yelp.ApiResult;
 import pokeyelp.grat.team.pokemonyelp.gson_yelp.Business;
+import pokeyelp.grat.team.pokemonyelp.helpers.ToolBar;
 import pokeyelp.grat.team.pokemonyelp.singleton.MrSingleton;
 
 public class SearchActivity extends AppCompatActivity implements GoogleApiClient.ConnectionCallbacks,
@@ -61,6 +62,10 @@ public class SearchActivity extends AppCompatActivity implements GoogleApiClient
     protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search);
+
+        ToolBar.setupSimpleToolbar(findViewById(android.R.id.content));
+
+
 
         mYelpToken = MrSingleton.getInstance().getToken();
 
@@ -87,7 +92,7 @@ public class SearchActivity extends AppCompatActivity implements GoogleApiClient
                 // to check, if the location is empty, it return the current location business.
                 // if it is not empty, it will get the business as the user required
 
-                if(mLocation.isEmpty()|| mLocation ==""){
+                if(mLocation.isEmpty()|| mLocation ==""||mCategories.isEmpty()||mCategories==""){
 
                     mGetYelp.execute(Api.YELP_BASE_URL +
                             "businesses/search?latitude="+mLat+
@@ -99,12 +104,17 @@ public class SearchActivity extends AppCompatActivity implements GoogleApiClient
 
                 }
 
-                else {
+                else if(!mCategories.isEmpty()){
 
                     //this query is based on the users' input,
                     mGetYelp.execute(Api.YELP_BASE_URL +
                             "businesses/search?" + "location=" + mLocation +
                             "&&term=" + mCategories +
+                            "&&sort_by=best_match");
+                }
+                else if (mCategories.isEmpty() || mCategories== ""){
+                    mGetYelp.execute(Api.YELP_BASE_URL +
+                            "businesses/search?" + "location=" + mLocation +
                             "&&sort_by=best_match");
                 }
 
@@ -119,8 +129,6 @@ public class SearchActivity extends AppCompatActivity implements GoogleApiClient
                     //more setup for the recycler view
                     recyclerView.setLayoutManager(linearLayoutManager);
                     recyclerView.setAdapter(mAdapter);
-
-
 
             }
         });
