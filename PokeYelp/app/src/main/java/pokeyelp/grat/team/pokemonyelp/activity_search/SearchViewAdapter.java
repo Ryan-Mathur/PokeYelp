@@ -6,9 +6,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.squareup.picasso.Picasso;
+
 import java.util.List;
 
-import it.sephiroth.android.library.picasso.Picasso;
 import pokeyelp.grat.team.pokemonyelp.R;
 import pokeyelp.grat.team.pokemonyelp.activity_detail.DetailActivity;
 import pokeyelp.grat.team.pokemonyelp.constants.IntentCode;
@@ -41,16 +42,23 @@ public class SearchViewAdapter extends RecyclerView.Adapter<SearchViewHolder> {
         holder.mAddress.setText(currentBusiness.getLocation().getAddress1());
         holder.mReview.setText(String.valueOf(currentBusiness.getReviewCount()));
 
-        Picasso.with(holder.mBusinessPhoto.getContext()).load(currentBusiness.getImageUrl())
-                .resize(200, 200).into(holder.mBusinessPhoto);
 
-        // ------- The getImageUrl is a place holder for the actual image holder
-        Picasso.with(holder.mRatingView.getContext()).load(currentBusiness.getImageUrl())
-                .resize(200, 200).into(holder.mBusinessPhoto);
+        // sometimes, maybe because some business dones't have a image, and it will return:
+        //java.lang.IllegalArgumentException: Path must not be empty.
+        // may check http://stackoverflow.com/questions/35721692/java-lang-illegalargumentexception-path-must-not-be-empty-in-picasso
+        // by galen~
 
-        //-------- The getImageUrl is a place holder for the Yelp Logo
-        Picasso.with(holder.mYelpLogo.getContext()).load(currentBusiness.getImageUrl())
-                .resize(200, 200).into(holder.mBusinessPhoto);
+
+        if (!currentBusiness.getImageUrl().isEmpty()) {
+            Picasso.with(holder.mBusinessPhoto.getContext()).load(currentBusiness.getImageUrl())
+                    .resize(200, 200).into(holder.mBusinessPhoto);
+        } else {
+            holder.mBusinessPhoto.setImageResource(R.drawable.box);
+        }
+
+        //these are placeholders for now
+        holder.mRatingView.setImageResource(R.drawable.box);
+        holder.mYelpLogo.setImageResource(R.drawable.box);
 
         holder.mRootView.setOnClickListener(new View.OnClickListener() {
             @Override
