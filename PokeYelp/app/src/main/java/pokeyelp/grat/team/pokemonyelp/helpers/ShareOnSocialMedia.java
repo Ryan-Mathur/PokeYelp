@@ -7,20 +7,23 @@ import android.content.Intent;
  * Created by Galen on 5/2/17.
  */
 
+/*
+Sample request
+
+ShareOnSocialMedia.share(this, "something");
+
+*/
+
 public class ShareOnSocialMedia {
-    private Context mContext;
-    private String mInput;
 
-    public void share(Context context, String giveMeWhatYouWantToShareInString) {
+    public static void share(Context context, String giveMeWhatYouWantToShareInString) {
 
-        mContext=context;
-        mInput=giveMeWhatYouWantToShareInString;
 
         Intent intent = new Intent();
         intent.setAction(Intent.ACTION_SEND );
 
         intent.setType("text/plain");
-        intent.putExtra(Intent.EXTRA_TEXT,mInput);
+        intent.putExtra(Intent.EXTRA_TEXT,giveMeWhatYouWantToShareInString);
 
         context.startActivity(intent);
 
