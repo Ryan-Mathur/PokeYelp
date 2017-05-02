@@ -42,4 +42,5 @@ public class YelpRecyclerAdapter extends RecyclerView.Adapter<YelpView> {
         mBusinesses = newList;
         notifyDataSetChanged();
     }
+
 }

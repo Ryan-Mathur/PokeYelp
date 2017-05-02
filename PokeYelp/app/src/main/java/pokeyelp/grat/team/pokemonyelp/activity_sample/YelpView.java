@@ -19,4 +19,5 @@ public class YelpView extends RecyclerView.ViewHolder{
         mAddress = (TextView) itemView.findViewById(R.id.business_address);
         mType = (TextView) itemView.findViewById(R.id.business_type);
     }
+
 }

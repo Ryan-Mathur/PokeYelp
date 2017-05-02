@@ -1,27 +1,29 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              android:orientation="vertical"
-              android:layout_width="match_parent"
-              android:layout_height="wrap_content">
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
     <TextView
         android:id="@+id/business_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Name"
         android:textSize="20dp"
-        android:textStyle="bold"/>
+        android:textStyle="bold" />
 
     <TextView
         android:id="@+id/business_type"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="business type"/>
+        android:text="business type" />
 
     <TextView
         android:id="@+id/business_address"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="address"/>
+        android:text="address" />
+
 
 
 </LinearLayout>

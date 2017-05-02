@@ -1,4 +1,5 @@
 <resources>
     <string name="app_name">Pokemon Yelp</string>
     <string name="search_button_name">Search</string>
+    <string name="check_network">check network connection</string>
 </resources>

@@ -17,12 +17,7 @@ public class CollectionActivity extends AppCompatActivity {
         DBAssetHelper dbSetup = new DBAssetHelper(CollectionActivity.this);
         dbSetup.getReadableDatabase();
 
-        GridLayoutManager gridLayoutManager = new GridLayoutManager.SpanSizeLookup() {
-            @Override
-            public int getSpanSize(int position) {
-                return 0;
-            }
-        };
+  
 
     }
 

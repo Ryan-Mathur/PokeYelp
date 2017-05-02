@@ -12,11 +12,11 @@ import pokeyelp.grat.team.pokemonyelp.activity_search.SearchActivity;
 
 public class HomeActivity extends AppCompatActivity {
 
-
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        //Setup search button to take you from main page to search page
         setContentView(R.layout.activity_home);
 
         Button searchButton = (Button) findViewById(R.id.search_button);
@@ -25,10 +25,7 @@ public class HomeActivity extends AppCompatActivity {
             public void onClick(View v) {
                 Intent intent = new Intent(v.getContext(), SearchActivity.class);
                 v.getContext().startActivity(intent);
-
             }
         });
-
     }
-
 }
