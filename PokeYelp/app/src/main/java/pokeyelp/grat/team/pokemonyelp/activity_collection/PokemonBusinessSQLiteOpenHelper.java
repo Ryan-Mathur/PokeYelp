@@ -22,14 +22,14 @@ public class PokemonBusinessSQLiteOpenHelper extends SQLiteOpenHelper {
     //---- Define Database  -------
 
     private static final int DATABASE_VERSION = 1;
-    private static final String DATABASE_NAME = "pokemonBusiness.db";
+    private static final String DATABASE_NAME = "yelpPokemon.db";
 //    private static final String POKEMONBUSINESS_TABLE_NAME = "POKEMONB";
 
     public static abstract class CollectionTable{
 
         public static final String TABLE_NAME = "collections";
         public static final String COLUMN_ID = "id";
-        public static final String COLUMN_PKMNNAME = "pokemon_name";
+        public static final String COLUMN_PKMNNAME = "collections_pokemon_name";
         public static final String COLUMN_STORECAUGHT = "store_caught";
 
     }
@@ -55,9 +55,9 @@ public class PokemonBusinessSQLiteOpenHelper extends SQLiteOpenHelper {
     private static final String SQL_CREATE_ENTRIES_STORE = "CREATE TABLE " +
             StoreTable.TABLE_NAME + " (" +
             StoreTable.COLUMN_ID + " INTEGER PRIMARY KEY, " +
-            StoreTable.COLUMN_YELPID + "TEXT, " +
-            StoreTable.COLUMN_PKMNNAME + "TEXT, " +
-            StoreTable.COLUMN_BOOKMARK + "TEXT" + ")";
+            StoreTable.COLUMN_YELPID + " TEXT, " +
+            StoreTable.COLUMN_PKMNNAME + " TEXT, " +
+            StoreTable.COLUMN_BOOKMARK + " BOOLEAN" + ")";
 
     private static final String SQL_DELETE_ENTRIES_STORE = "DROP TABLE IF EXISTS " +
             StoreTable.TABLE_NAME;
@@ -105,13 +105,13 @@ public class PokemonBusinessSQLiteOpenHelper extends SQLiteOpenHelper {
     }
 
     // Take in an id and pokemonname to update the store table
-    public void updatePokemon(String id, String pokemon_name) {
+    public void updatePokemon(String id, String newPokemon) {
         //----- stores the Pokemon with a Yelp Id.
         SQLiteDatabase db = getWritableDatabase();
         ContentValues values = new ContentValues();
-        values.put(StoreTable.COLUMN_PKMNNAME, pokemon_name);
+        values.put(StoreTable.COLUMN_PKMNNAME, newPokemon);
         Log.d(TAG, "updatePokemon: " + StoreTable.COLUMN_PKMNNAME);
-        db.update(StoreTable.TABLE_NAME, values,StoreTable.COLUMN_YELPID+ " = "+ id, null);
+        db.update(StoreTable.TABLE_NAME, values, StoreTable.COLUMN_YELPID + " = ?", new String[]{id});
         db.close();
 
     }
@@ -143,13 +143,11 @@ public class PokemonBusinessSQLiteOpenHelper extends SQLiteOpenHelper {
     }
 
     // after 24 hours the store resets to empty, method to clear data from store table
-    public void resetPokemon(){
+    public void resetStores(){
 
         SQLiteDatabase db = getWritableDatabase();
-        ContentValues values = new ContentValues();
-        values.remove(StoreTable.COLUMN_YELPID);
-        values.remove(StoreTable.COLUMN_PKMNNAME);
-        db.update(StoreTable.TABLE_NAME,values,null,null );
+        db.execSQL(SQL_DELETE_ENTRIES_STORE);
+        db.execSQL(SQL_CREATE_ENTRIES_STORE);
         db.close();
 
     }
@@ -158,12 +156,12 @@ public class PokemonBusinessSQLiteOpenHelper extends SQLiteOpenHelper {
 
     //---------- takes the Pokemon and Yelp Store ID from findPokemon
     //---------- add to collection
-    public void addToCollection(String id, String pokemon_name) {
+    public void addToCollection(String pokemonName, String caughtAtYelpId) {
 
         SQLiteDatabase db = getWritableDatabase();
         ContentValues values = new ContentValues();
-        values.put(CollectionTable.COLUMN_PKMNNAME, pokemon_name);
-        values.put(CollectionTable.COLUMN_STORECAUGHT, id);
+        values.put(CollectionTable.COLUMN_PKMNNAME, pokemonName);
+        values.put(CollectionTable.COLUMN_STORECAUGHT, caughtAtYelpId);
         Log.d(TAG, "addToCollection: " + CollectionTable.COLUMN_PKMNNAME);
         db.insert(CollectionTable.TABLE_NAME, null, values);
 

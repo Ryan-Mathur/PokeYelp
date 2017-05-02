@@ -3,7 +3,6 @@ package pokeyelp.grat.team.pokemonyelp.activity_home;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 
@@ -15,10 +14,9 @@ public class HomeActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        //Setup search button to take you from main page to search page
         setContentView(R.layout.activity_home);
 
+        //Setup search button to take you from main page to search page
         Button searchButton = (Button) findViewById(R.id.search_button);
         searchButton.setOnClickListener(new View.OnClickListener() {
             @Override
