@@ -6,23 +6,17 @@ package pokeyelp.grat.team.pokemonyelp.activity_collection;
 
 public class PokemonClass {
 
-    private long mId;
-    private String mPokemonName, mYelpId, mBookmark;
 
-    public PokemonClass(Long id, String pokemonName, String yelpId, String bookmark) {
-        mId = id;
+    private String mPokemonName, mYelpId;
+    private Boolean mBookmark;
+
+    public PokemonClass( String pokemonName, String yelpId, Boolean bookmark) {
         mPokemonName = pokemonName;
         mYelpId = yelpId;
         mBookmark = bookmark;
     }
 
-    public Long getId() {
-        return mId;
-    }
 
-    public void setId(Long id) {
-        mId = id;
-    }
 
     public String getPokemonName() {
         return mPokemonName;
@@ -40,11 +34,11 @@ public class PokemonClass {
         mYelpId = yelpId;
     }
 
-    public String getBookmark() {
+    public Boolean getBookmark() {
         return mBookmark;
     }
 
-    public void setBookmark(String bookmark) {
+    public void setBookmark(Boolean bookmark) {
         mBookmark = bookmark;
     }
 }

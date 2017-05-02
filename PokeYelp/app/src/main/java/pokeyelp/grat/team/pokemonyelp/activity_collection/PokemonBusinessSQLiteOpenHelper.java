@@ -6,12 +6,13 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.database.sqlite.SQLiteQueryBuilder;
-import android.provider.BaseColumns;
+import android.util.Log;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import pokeyelp.grat.team.pokemonyelp.gson_yelp.BusinessDetail;
+import static android.content.ContentValues.TAG;
+
 
 /**
  * Created by Admin on 5/1/17.
@@ -22,7 +23,7 @@ public class PokemonBusinessSQLiteOpenHelper extends SQLiteOpenHelper {
 
     private static final int DATABASE_VERSION = 1;
     private static final String DATABASE_NAME = "pokemonBusiness.db";
-    private static final String POKEMONBUSINESS_TABLE_NAME = "POKEMONB";
+//    private static final String POKEMONBUSINESS_TABLE_NAME = "POKEMONB";
 
     public static abstract class CollectionTable{
 
@@ -67,7 +68,7 @@ public class PokemonBusinessSQLiteOpenHelper extends SQLiteOpenHelper {
 
 
     private PokemonBusinessSQLiteOpenHelper(Context context) {
-        super(context, "db", null, 1);
+        super(context, DATABASE_NAME, null, DATABASE_VERSION);
     }
 
     public static PokemonBusinessSQLiteOpenHelper getInstance(Context context) {
@@ -98,7 +99,7 @@ public class PokemonBusinessSQLiteOpenHelper extends SQLiteOpenHelper {
         ContentValues values = new ContentValues();
         values.put(StoreTable.COLUMN_YELPID, id);
         values.put(StoreTable.COLUMN_PKMNNAME, pokemon_name);
-
+        Log.d(TAG, "insertPokemonStore: " + StoreTable.COLUMN_YELPID);
         db.insert(StoreTable.TABLE_NAME, null, values);
         db.close();
     }
@@ -109,6 +110,7 @@ public class PokemonBusinessSQLiteOpenHelper extends SQLiteOpenHelper {
         SQLiteDatabase db = getWritableDatabase();
         ContentValues values = new ContentValues();
         values.put(StoreTable.COLUMN_PKMNNAME, pokemon_name);
+        Log.d(TAG, "updatePokemon: " + StoreTable.COLUMN_PKMNNAME);
         db.update(StoreTable.TABLE_NAME, values,StoreTable.COLUMN_YELPID+ " = "+ id, null);
         db.close();
 
@@ -135,6 +137,7 @@ public class PokemonBusinessSQLiteOpenHelper extends SQLiteOpenHelper {
         }
 
         cursor.close();
+        Log.d(TAG, "searchForPokemon: " + pokemonName);
         return pokemonName;
 
     }
@@ -161,7 +164,7 @@ public class PokemonBusinessSQLiteOpenHelper extends SQLiteOpenHelper {
         ContentValues values = new ContentValues();
         values.put(CollectionTable.COLUMN_PKMNNAME, pokemon_name);
         values.put(CollectionTable.COLUMN_STORECAUGHT, id);
-
+        Log.d(TAG, "addToCollection: " + CollectionTable.COLUMN_PKMNNAME);
         db.insert(CollectionTable.TABLE_NAME, null, values);
 
         db.close();
@@ -191,12 +194,30 @@ public class PokemonBusinessSQLiteOpenHelper extends SQLiteOpenHelper {
             }
 
         }cursor.close();
+        Log.d(TAG, "getYourCollection: " + collection);
         return collection;
 
     }
 
 
     //todo test all dbhelper methods
+
+    public boolean storeTableIsEmpty() {
+        SQLiteDatabase db = getReadableDatabase();
+        Cursor cursor = db.query(StoreTable.TABLE_NAME, null, null, null, null, null, null);
+        boolean isEmpty = !cursor.moveToFirst();
+        cursor.close();
+        return isEmpty;
+    }
+
+    public boolean collectionTableIsEmpty() {
+        SQLiteDatabase db = getReadableDatabase();
+        Cursor cursor = db.query(CollectionTable.TABLE_NAME, null, null, null, null, null, null);
+        boolean isEmpty = !cursor.moveToFirst();
+        cursor.close();
+        return isEmpty;
+    }
+
 }
 
 
