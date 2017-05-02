@@ -50,7 +50,7 @@ public class SearchActivity extends AppCompatActivity implements GoogleApiClient
     private String mYelpToken;
     private Button mFilterButton;
     private String mSortBy;
-    private String mloaction,mcategories;
+    private String mLocation, mCategories;
 
 
     private GetYelpBusinesses mGetYelp;
@@ -78,21 +78,21 @@ public class SearchActivity extends AppCompatActivity implements GoogleApiClient
             @Override
             public void onClick(View v) {
 
-                mloaction = searchByLoacationInput.getText().toString();
+                mLocation = searchByLoacationInput.getText().toString();
 
-                mcategories = searchByNameInput.getText().toString();
+                mCategories = searchByNameInput.getText().toString();
 
                 mGetYelp = new GetYelpBusinesses();
 
                 // to check, if the location is empty, it return the current location business.
                 // if it is not empty, it will get the business as the user required
 
-                if(mloaction.isEmpty()||mloaction==""){
+                if(mLocation.isEmpty()|| mLocation ==""){
 
                     mGetYelp.execute(Api.YELP_BASE_URL +
                             "businesses/search?latitude="+mLat+
                             "&longitude="+mLong+
-                            "&&term=" + mcategories +
+                            "&&term=" + mCategories +
                             "&&sort_by=best_match");
 
                     Log.d(TAG, "onClick: mlong: "+mLong+" mylat: "+ mLat);
@@ -103,8 +103,8 @@ public class SearchActivity extends AppCompatActivity implements GoogleApiClient
 
                     //this query is based on the users' input,
                     mGetYelp.execute(Api.YELP_BASE_URL +
-                            "businesses/search?" + "location=" + mloaction +
-                            "&&term=" + mcategories +
+                            "businesses/search?" + "location=" + mLocation +
+                            "&&term=" + mCategories +
                             "&&sort_by=best_match");
                 }
 
@@ -333,12 +333,12 @@ public class SearchActivity extends AppCompatActivity implements GoogleApiClient
                         }
 
 
-                        if(mloaction.isEmpty()||mloaction==""){
+                        if(mLocation.isEmpty()|| mLocation ==""){
 
                            new GetYelpBusinesses().execute(Api.YELP_BASE_URL +
                                     "businesses/search?latitude="+mLat+
                                     "&longitude="+mLong+
-                                    "&&term=" + mcategories +
+                                    "&&term=" + mCategories +
                                     "&&sort_by="+mSortBy);
                         }
 
@@ -346,8 +346,8 @@ public class SearchActivity extends AppCompatActivity implements GoogleApiClient
 
                             //this query is based on the users' input,
                            new GetYelpBusinesses().execute(Api.YELP_BASE_URL +
-                                    "businesses/search?" + "location=" + mloaction +
-                                    "&&term=" + mcategories +
+                                    "businesses/search?" + "location=" + mLocation +
+                                    "&&term=" + mCategories +
                                     "&&sort_by="+mSortBy);
                         }
 
