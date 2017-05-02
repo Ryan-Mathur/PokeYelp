@@ -8,7 +8,6 @@ import android.view.ViewGroup;
 
 import java.util.List;
 
-import it.sephiroth.android.library.picasso.Picasso;
 import pokeyelp.grat.team.pokemonyelp.R;
 import pokeyelp.grat.team.pokemonyelp.activity_detail.DetailActivity;
 import pokeyelp.grat.team.pokemonyelp.constants.IntentCode;

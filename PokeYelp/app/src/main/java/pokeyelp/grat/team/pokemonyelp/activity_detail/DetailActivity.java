@@ -4,10 +4,12 @@ import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
+import com.squareup.picasso.Picasso;
 
 import java.io.IOException;
 
@@ -99,6 +101,10 @@ public class DetailActivity extends AppCompatActivity {
                 Toast.makeText(DetailActivity.this, "No Pokemon Found!", Toast.LENGTH_SHORT).show();
             } else {
                 Toast.makeText(DetailActivity.this, s, Toast.LENGTH_SHORT).show();
+                ImageView pokemonSprite = (ImageView) findViewById(R.id.detail_pokemon_picture);
+                String imageUrl = Pokemon.POKEMON_SPRITE_BASE_URL + s +".gif";
+                Picasso.with(DetailActivity.this).load(imageUrl)
+                        .into(pokemonSprite);
             }
         }
     }

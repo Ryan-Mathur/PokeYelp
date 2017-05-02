@@ -6,4 +6,5 @@ package pokeyelp.grat.team.pokemonyelp.constants;
 
 public class Pokemon {
     public static final int POKEMON_NUMBERS = 720;
+    public static final String POKEMON_SPRITE_BASE_URL = "http://www.pokestadium.com/sprites/xy/";
 }

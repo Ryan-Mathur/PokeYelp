@@ -28,4 +28,10 @@
         android:visibility="invisible"
         android:text="Scan for Pokemon"/>
 
+    <ImageView
+        android:id="@+id/detail_pokemon_picture"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="invisible"/>
+
 </LinearLayout>
