@@ -41,6 +41,13 @@ public class SearchViewAdapter extends RecyclerView.Adapter<SearchViewHolder> {
         holder.mAddress.setText(currentBusiness.getLocation().getAddress1());
         holder.mReview.setText(String.valueOf(currentBusiness.getReviewCount()));
 
+
+        // sometimes, maybe because some business dones't have a image, and it will return:
+        //java.lang.IllegalArgumentException: Path must not be empty.
+        // may check http://stackoverflow.com/questions/35721692/java-lang-illegalargumentexception-path-must-not-be-empty-in-picasso
+        // by galen~
+
+
         Picasso.with(holder.mBusinessPhoto.getContext()).load(currentBusiness.getImageUrl())
                 .resize(200, 200).into(holder.mBusinessPhoto);
 
