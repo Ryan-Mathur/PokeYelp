@@ -9,7 +9,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
-import com.squareup.picasso.Picasso;
+import com.koushikdutta.ion.Ion;
 
 import java.io.IOException;
 
@@ -18,9 +18,9 @@ import okhttp3.Request;
 import okhttp3.Response;
 import pokeyelp.grat.team.pokemonyelp.R;
 import pokeyelp.grat.team.pokemonyelp.constants.Api;
+import pokeyelp.grat.team.pokemonyelp.constants.IntentCode;
 import pokeyelp.grat.team.pokemonyelp.constants.Pokemon;
 import pokeyelp.grat.team.pokemonyelp.gson_pokemon_species.Species;
-import pokeyelp.grat.team.pokemonyelp.gson_yelp.ApiResult;
 import pokeyelp.grat.team.pokemonyelp.gson_yelp.BusinessDetail;
 import pokeyelp.grat.team.pokemonyelp.singleton.MrSingleton;
 
@@ -37,8 +37,9 @@ public class DetailActivity extends AppCompatActivity {
         setContentView(R.layout.activity_detail);
 
         mYelpToken = MrSingleton.getInstance().getToken();
+        String yelpId = getIntent().getStringExtra(IntentCode.BUSINESS_ID_TO_DETAILS);
         mApiTask = new GetYelpBusiness();
-        mApiTask.execute(Api.YELP_BASE_URL + "businesses/" + FAKE_YELP_ID);
+        mApiTask.execute(Api.YELP_BASE_URL + "businesses/" + yelpId);
     }
 
     public void setupViews(BusinessDetail business){
@@ -81,7 +82,7 @@ public class DetailActivity extends AppCompatActivity {
                         Gson gson = new Gson();
                         pokemonSpecies = gson.fromJson(speciesResponse.body().string(), Species.class);
                         System.out.println(pokemonSpecies.getName() + " " + pokemonSpecies.getCaptureRate());
-                        if (pokemonSpecies.getCaptureRate()>=100) {
+                        if (pokemonSpecies.getCaptureRate()>=1) {
                             return pokemonSpecies.getName();
                         }
                         tries--;
@@ -102,9 +103,12 @@ public class DetailActivity extends AppCompatActivity {
             } else {
                 Toast.makeText(DetailActivity.this, s, Toast.LENGTH_SHORT).show();
                 ImageView pokemonSprite = (ImageView) findViewById(R.id.detail_pokemon_picture);
+                pokemonSprite.setVisibility(View.VISIBLE);
                 String imageUrl = Pokemon.POKEMON_SPRITE_BASE_URL + s +".gif";
-                Picasso.with(DetailActivity.this).load(imageUrl)
-                        .into(pokemonSprite);
+//                Glide.with(DetailActivity.this).load(imageUrl)
+//                        .into(pokemonSprite);
+                Ion.with(DetailActivity.this).load(imageUrl).intoImageView(pokemonSprite);
+
             }
         }
     }
