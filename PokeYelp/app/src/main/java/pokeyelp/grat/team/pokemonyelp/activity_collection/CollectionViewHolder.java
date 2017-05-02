@@ -13,8 +13,8 @@ import pokeyelp.grat.team.pokemonyelp.R;
 
 public class CollectionViewHolder extends RecyclerView.ViewHolder {
 
-    private ImageView mCollectionImageView;
-    private TextView mCollectionTextView;
+    public ImageView mCollectionImageView;
+    public TextView mCollectionTextView, mCollectionPokemonName;
     View mRootView;
 
 
@@ -22,6 +22,7 @@ public class CollectionViewHolder extends RecyclerView.ViewHolder {
         super(itemView);
         mRootView = itemView.findViewById(R.id.collection_rootview);
         mCollectionImageView = (ImageView) itemView.findViewById(R.id.collection_pokemon_image);
+        mCollectionPokemonName = (TextView) itemView.findViewById(R.id.collection_pokemonName_textview);
         mCollectionTextView = (TextView) itemView.findViewById(R.id.collection_company_textview);
 
     }

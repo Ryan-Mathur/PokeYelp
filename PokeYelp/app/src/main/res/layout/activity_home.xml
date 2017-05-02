@@ -8,6 +8,13 @@
     tools:context="pokeyelp.grat.team.pokemonyelp.activity_home.HomeActivity">
 
     <Button
+        android:id="@+id/tocollection_activity"
+        android:text="collections activity"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
+
+
+    <Button
         android:id="@+id/search_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

@@ -4,9 +4,11 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 
-import java.util.List;
+import com.squareup.picasso.Picasso;
 
+import java.util.List;
 import pokeyelp.grat.team.pokemonyelp.R;
+import pokeyelp.grat.team.pokemonyelp.constants.Pokemon;
 
 /**
  * Created by Admin on 5/2/17.
@@ -29,11 +31,24 @@ public class CollectionRecyclerViewAdapater extends RecyclerView.Adapter<Collect
 
     @Override
     public void onBindViewHolder(CollectionViewHolder holder, int position) {
+        final Collection currentCollection = mCollectionList.get(position);
+        //image for the pokemon
+        String imageUrl = Pokemon.POKEMON_SPRITE_BASE_URL + currentCollection.getPokemonName() + ".gif";
+        Picasso.with(holder.mCollectionImageView.getContext()).load(imageUrl).into(holder.mCollectionImageView);
 
+        holder.mCollectionPokemonName.setText(currentCollection.getPokemonName());
+
+//        holder.mCollectionTextView.setText(currentCollection.getYelpStore());
     }
 
     @Override
     public int getItemCount() {
-        return 0;
+        return mCollectionList.size();
     }
+
+    public void getnewCollection(List<Collection> newCollection){
+        mCollectionList = newCollection;
+        notifyDataSetChanged();
+    }
+
 }
