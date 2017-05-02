@@ -25,6 +25,6 @@ public class SearchViewHolder extends RecyclerView.ViewHolder {
         mBusinessPhoto= (ImageView) itemView.findViewById(R.id.search_imageview);
         mRatingView = (ImageView) itemView.findViewById(R.id.search_fivestars);
         mYelpLogo= (ImageView) itemView.findViewById(R.id.search_yelplogo);
-        mRootView=itemView.findViewById(R.id.root_view_for_search_list);
+        mRootView=itemView;
     }
 }
