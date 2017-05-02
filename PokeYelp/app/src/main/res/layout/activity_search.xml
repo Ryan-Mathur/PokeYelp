@@ -44,25 +44,23 @@
                     android:layout_alignParentRight="true"
                     android:layout_centerVertical="true"
                     android:layout_margin="5dp"
-                    android:visibility="invisible"
-                    android:background="@drawable/ic_action_filter" />
+                    android:background="@drawable/ic_action_filter"
+                    android:visibility="invisible" />
 
 
                 <Button
                     android:id="@+id/the_search_button"
                     android:layout_width="35dp"
                     android:layout_height="35dp"
-                    android:layout_toLeftOf="@id/filter"
                     android:layout_centerVertical="true"
-
+                    android:layout_toLeftOf="@id/filter"
                     android:background="@drawable/search_ic1" />
-
-
 
             </RelativeLayout>
 
 
         </LinearLayout>
+
 
         <android.support.v7.widget.RecyclerView
             android:id="@+id/search_result_recyvler_View"

@@ -58,7 +58,7 @@ public class SearchActivity extends AppCompatActivity implements GoogleApiClient
     private SearchViewAdapter mAdapter;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search);
 
@@ -145,10 +145,6 @@ public class SearchActivity extends AppCompatActivity implements GoogleApiClient
                 Toast.makeText(SearchActivity.this, "sort by!!!", Toast.LENGTH_SHORT).show();
             }
         });
-
-
-
-
 
     }
 
