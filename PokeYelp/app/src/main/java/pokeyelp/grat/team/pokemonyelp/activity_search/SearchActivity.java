@@ -23,7 +23,6 @@ import android.widget.Toast;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationListener;
-import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
 import com.google.gson.Gson;
 
@@ -44,7 +43,6 @@ public class SearchActivity extends AppCompatActivity implements GoogleApiClient
         GoogleApiClient.OnConnectionFailedListener, LocationListener {
 
     public static final String TAG = "SearchActivity";
-
     public static final int REQUEST_LOCATION = 10;
     private GoogleApiClient mGoogleApiClient;
     private String mLong, mLat;
@@ -52,11 +50,11 @@ public class SearchActivity extends AppCompatActivity implements GoogleApiClient
     private Button mFilterButton;
     private String mSortBy;
     private String mLocation, mCategories;
-
-
     private GetYelpBusinesses mGetYelp;
-    //recycler adapter here because we need to call it inside the asynctask to update it's list
     private SearchViewAdapter mAdapter;
+    private String mSortingUrlForLater = "";
+    private EditText mCategoryInput;
+    private EditText mLocationInput;
 
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
@@ -66,16 +64,33 @@ public class SearchActivity extends AppCompatActivity implements GoogleApiClient
         ToolBar.setupSimpleToolbar(findViewById(android.R.id.content));
 
 
-
         mYelpToken = MrSingleton.getInstance().getToken();
 
-        final EditText searchByNameInput = (EditText) findViewById(R.id.search_by_name);
-        final EditText searchByLoacationInput = (EditText) findViewById(R.id.search_by_location);
+        mCategoryInput = (EditText) findViewById(R.id.search_by_name);
+        mLocationInput = (EditText) findViewById(R.id.search_by_location);
 
-        //when i type jvftj, dones't show anything, when i type kui, the app crushed!
+        //setting up the recycler view
+        RecyclerView recyclerView = (RecyclerView) findViewById(R.id.search_result_recyvler_View);
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(SearchActivity.this, LinearLayoutManager.VERTICAL, false);
+
+        //because we are running an asynctask in the background, we don't know WHEN we are going to get
+        //the list to give to the recycler adapter. So here, I'm just giving it an empty list, as a placeholder.
+        mAdapter = new SearchViewAdapter(new ArrayList<Business>());
+
+        //more setup for the recycler view
+        recyclerView.setLayoutManager(linearLayoutManager);
+        recyclerView.setAdapter(mAdapter);
+
+        if (mGoogleApiClient == null) {
+            mGoogleApiClient = new GoogleApiClient.Builder(SearchActivity.this)
+                    .addConnectionCallbacks(SearchActivity.this)
+                    .addOnConnectionFailedListener(SearchActivity.this)
+                    .addApi(LocationServices.API)
+                    .build();
+        }
 
         Button search_button = (Button) findViewById(R.id.the_search_button);
-        mFilterButton= (Button) findViewById(R.id.filter);
+        mFilterButton = (Button) findViewById(R.id.filter);
 
 
         // call a api from yelp when click on the search button
@@ -83,85 +98,80 @@ public class SearchActivity extends AppCompatActivity implements GoogleApiClient
             @Override
             public void onClick(View v) {
 
-                mLocation = searchByLoacationInput.getText().toString();
-
-                mCategories = searchByNameInput.getText().toString();
-
-                mGetYelp = new GetYelpBusinesses();
-
-                // to check, if the location is empty, it return the current location business.
-                // if it is not empty, it will get the business as the user required
-
-                if(mLocation.isEmpty()|| mLocation ==""||mCategories.isEmpty()||mCategories==""){
-
-                    mGetYelp.execute(Api.YELP_BASE_URL +
-                            "businesses/search?latitude="+mLat+
-                            "&longitude="+mLong+
-                            "&&term=" + mCategories +
-                            "&&sort_by=best_match");
-
-                    Log.d(TAG, "onClick: mlong: "+mLong+" mylat: "+ mLat);
-
-                }
-
-                else if(!mCategories.isEmpty()){
-
-                    //this query is based on the users' input,
-                    mGetYelp.execute(Api.YELP_BASE_URL +
-                            "businesses/search?" + "location=" + mLocation +
-                            "&&term=" + mCategories +
-                            "&&sort_by=best_match");
-                }
-                else if (mCategories.isEmpty() || mCategories== ""){
-                    mGetYelp.execute(Api.YELP_BASE_URL +
-                            "businesses/search?" + "location=" + mLocation +
-                            "&&sort_by=best_match");
-                }
-
-                    //setting up the recycler view
-                    RecyclerView recyclerView = (RecyclerView) findViewById(R.id.search_result_recyvler_View);
-                    LinearLayoutManager linearLayoutManager = new LinearLayoutManager(SearchActivity.this, LinearLayoutManager.VERTICAL, false);
-
-                    //because we are running an asynctask in the background, we don't know WHEN we are going to get
-                    //the list to give to the recycler adapter. So here, I'm just giving it an empty list, as a placeholder.
-                    mAdapter = new SearchViewAdapter(new ArrayList<Business>());
-
-                    //more setup for the recycler view
-                    recyclerView.setLayoutManager(linearLayoutManager);
-                    recyclerView.setAdapter(mAdapter);
+                startSearch();
 
             }
         });
 
-
-
-
-        if (mGoogleApiClient == null) {
-            mGoogleApiClient = new GoogleApiClient.Builder(this)
-                    .addConnectionCallbacks(this)
-                    .addOnConnectionFailedListener(this)
-                    .addApi(LocationServices.API)
-                    .build();
-        }
 
         // filter the list by click the filter button
 
         mFilterButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if (mGetYelp!=null && mGetYelp.getStatus().equals(AsyncTask.Status.RUNNING)){
+                    Toast.makeText(SearchActivity.this, "Already sorting, please wait", Toast.LENGTH_SHORT).show();
+                    return;
+                }
                 SortTheSerachResultList();
-                Toast.makeText(SearchActivity.this, "sort by!!!", Toast.LENGTH_SHORT).show();
             }
         });
 
+
     }
 
+    private void startSearch(){
+
+        if (mGetYelp!=null && mGetYelp.getStatus().equals(AsyncTask.Status.RUNNING)){
+            Toast.makeText(SearchActivity.this, "Already searching", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        mLocation = mLocationInput.getText().toString().trim();
+
+        mCategories = mCategoryInput.getText().toString().trim();
+
+        mGetYelp = new GetYelpBusinesses();
+
+        Log.d(TAG, "onClick: mlong: " + mLong + " mylat: " + mLat);
+
+        String locationQuery;
+
+        String categoryQuery="";
+
+        String sortByQuery="&&sort_by=distance";
+
+        String urlQuery;
+
+        if (mLocation.isEmpty()){
+            if (!mGoogleApiClient.isConnected()) {
+                mGoogleApiClient.connect();
+            } else{
+                System.out.println("getting location from within onclick");
+                getLocation();
+            }
+            locationQuery = "latitude=" + mLat +
+                    "&longitude=" + mLong;
+        } else {
+            locationQuery = "location=" + mLocation;
+        }
+
+        if (!mCategories.isEmpty()){
+            categoryQuery = "&&term=" + mCategories;
+            sortByQuery = "&&sort_by=best_match";
+        }
 
 
+        mSortingUrlForLater= Api.YELP_BASE_URL + "businesses/search?" + locationQuery + categoryQuery;
 
+        urlQuery = Api.YELP_BASE_URL + "businesses/search?" + locationQuery + categoryQuery + sortByQuery;
+        System.out.println(urlQuery);
 
-    @Override
-    public void onConnected(@Nullable Bundle bundle) {
+        mGetYelp = new GetYelpBusinesses();
+        mGetYelp.execute(urlQuery);
+    }
+
+    private void getLocation() {
 
         if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED &&
                 ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
@@ -169,24 +179,29 @@ public class SearchActivity extends AppCompatActivity implements GoogleApiClient
                     new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
                     REQUEST_LOCATION);
         }
-
         else {
 
             Location lastLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
 
             if (lastLocation == null) {
+//                LocationRequest locationRequest = LocationRequest.create()
+//                        .setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
+//                LocationServices.FusedLocationApi.requestLocationUpdates(mGoogleApiClient, locationRequest, this);
+                Toast.makeText(this, "Cannot find location", Toast.LENGTH_SHORT).show();
 
-                LocationRequest locationRequest = LocationRequest.create()
-                        .setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
-                LocationServices.FusedLocationApi.requestLocationUpdates(mGoogleApiClient, locationRequest, this);
-            }
-            else {
-                mLat=String.valueOf(lastLocation.getLatitude());
-                mLong=String.valueOf(lastLocation.getLongitude());
+            } else {
+                mLat = String.valueOf(lastLocation.getLatitude());
+                mLong = String.valueOf(lastLocation.getLongitude());
 
             }
 
         }
+    }
+
+
+    @Override
+    public void onConnected(@Nullable Bundle bundle) {
+        getLocation();
 
     }
 
@@ -195,28 +210,18 @@ public class SearchActivity extends AppCompatActivity implements GoogleApiClient
         switch (requestCode) {
             case REQUEST_LOCATION:
                 if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-
-                    if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
-                        Location lastLocation = LocationServices.FusedLocationApi.getLastLocation(
-                                mGoogleApiClient);
-
-                        if (lastLocation == null) {
-                            LocationRequest locationRequest = LocationRequest.create()
-                                    .setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
-                            LocationServices.FusedLocationApi.requestLocationUpdates(mGoogleApiClient, locationRequest, this);
-                        }
-
-
-
-                        break;
-                    }
+                        getLocation();
+                } else {
+                    Toast.makeText(this, "You said no, how could you??", Toast.LENGTH_SHORT).show();
                 }
+                break;
         }
     }
 
     @Override
     protected void onStart() {
         super.onStart();
+
         if (mGoogleApiClient != null) {
             mGoogleApiClient.connect();
         }
@@ -302,58 +307,44 @@ public class SearchActivity extends AppCompatActivity implements GoogleApiClient
     }
 
 
-
-   // make a method to sort the list
-    private Dialog SortTheSerachResultList(){
+    // make a method to sort the list
+    private Dialog SortTheSerachResultList() {
 
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
 
         //Sort the results by one of the these modes: best_match, rating, review_count or distance. By default it's best_match.
-        String strArry[]= {"Rating","Best_match","Review_count","Distance"};
+        String strArry[] = {"Rating", "Best_match", "Review_count", "Distance"};
 
         builder.setTitle("Sort By")
                 .setItems(strArry, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         //// The 'which' argument contains the index position
-                        switch (which){
+                        switch (which) {
                             case 0:
-                                mSortBy="rating";
+                                mSortBy = "rating";
 
                                 break;
                             case 1:
-                                mSortBy="best_match";
+                                mSortBy = "best_match";
 
                                 break;
                             case 2:
-                                mSortBy="review_count";
+                                mSortBy = "review_count";
 
                                 break;
                             case 3:
-                                mSortBy="distance";
+                                mSortBy = "distance";
                                 break;
                             default:
-                                mSortBy="best_match";
+                                mSortBy = "best_match";
                         }
 
+                        String urlQuery = mSortingUrlForLater+"&&sort_by="+mSortBy;
 
-                        if(mLocation.isEmpty()|| mLocation ==""){
+                        mGetYelp = new GetYelpBusinesses();
+                        mGetYelp.execute(urlQuery);
 
-                           new GetYelpBusinesses().execute(Api.YELP_BASE_URL +
-                                    "businesses/search?latitude="+mLat+
-                                    "&longitude="+mLong+
-                                    "&&term=" + mCategories +
-                                    "&&sort_by="+mSortBy);
-                        }
-
-                        else {
-
-                            //this query is based on the users' input,
-                           new GetYelpBusinesses().execute(Api.YELP_BASE_URL +
-                                    "businesses/search?" + "location=" + mLocation +
-                                    "&&term=" + mCategories +
-                                    "&&sort_by="+mSortBy);
-                        }
 
 
                     }

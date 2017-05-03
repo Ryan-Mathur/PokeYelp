@@ -36,6 +36,10 @@ public class ToolBar {
         ImageView collection_button = (ImageView) view.findViewById(R.id.goto_collection_button);
         ImageView leaderboard_button = (ImageView) view.findViewById(R.id.goto_leaderboard_button);
 
+        if (view.getContext() instanceof HomeActivity) {
+            search_button.setVisibility(View.GONE);
+        }
+
         if (view.getContext() instanceof SearchActivity) {
             search_button.setVisibility(View.GONE);
         }
