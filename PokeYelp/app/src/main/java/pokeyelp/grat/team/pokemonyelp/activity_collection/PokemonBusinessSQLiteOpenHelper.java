@@ -23,13 +23,13 @@ public class PokemonBusinessSQLiteOpenHelper extends SQLiteOpenHelper {
 
     private static final int DATABASE_VERSION = 1;
     private static final String DATABASE_NAME = "yelpPokemon.db";
-//    private static final String POKEMONBUSINESS_TABLE_NAME = "POKEMONB";
 
     public static abstract class CollectionTable{
 
         public static final String TABLE_NAME = "collections";
         public static final String COLUMN_ID = "id";
         public static final String COLUMN_PKMNNAME = "collections_pokemon_name";
+        public static final String COLUMN_PKMN_ID = "pokemon_id";
         public static final String COLUMN_STORECAUGHT = "store_caught";
 
     }
@@ -47,6 +47,7 @@ public class PokemonBusinessSQLiteOpenHelper extends SQLiteOpenHelper {
             CollectionTable.TABLE_NAME + " (" +
             CollectionTable.COLUMN_ID + " INTEGER PRIMARY KEY, " +
             CollectionTable.COLUMN_PKMNNAME + " TEXT, " +
+            CollectionTable.COLUMN_PKMN_ID + " INTEGER, " +
             CollectionTable.COLUMN_STORECAUGHT + " TEXT" + ")";
 
     private static final String SQL_DELETE_ENTRIES_POKEMON = "DROP TABLE IF EXISTS " +
@@ -156,11 +157,12 @@ public class PokemonBusinessSQLiteOpenHelper extends SQLiteOpenHelper {
 
     //---------- takes the Pokemon and Yelp Store ID from findPokemon
     //---------- add to collection
-    public void addToCollection(String pokemonName, String caughtAtYelpId) {
+    public void addToCollection(String pokemonName, int id, String caughtAtYelpId) {
 
         SQLiteDatabase db = getWritableDatabase();
         ContentValues values = new ContentValues();
         values.put(CollectionTable.COLUMN_PKMNNAME, pokemonName);
+        values.put(CollectionTable.COLUMN_PKMN_ID, id);
         values.put(CollectionTable.COLUMN_STORECAUGHT, caughtAtYelpId);
         Log.d(TAG, "addToCollection: " + CollectionTable.COLUMN_PKMNNAME);
         db.insert(CollectionTable.TABLE_NAME, null, values);
@@ -179,14 +181,12 @@ public class PokemonBusinessSQLiteOpenHelper extends SQLiteOpenHelper {
 
         if (cursor.moveToFirst()) {
             while (!cursor.isAfterLast()) {
-                long id = cursor.getLong(cursor.getColumnIndex(CollectionTable.COLUMN_ID));
                 String pokemon_Name = cursor.getString(cursor.getColumnIndex(CollectionTable.COLUMN_PKMNNAME));
+                int pkmnId = cursor.getInt(cursor.getColumnIndex(CollectionTable.COLUMN_PKMN_ID));
                 String yelpStore = cursor.getString(cursor.getColumnIndex(CollectionTable.COLUMN_STORECAUGHT));
 
-
-                Collection collection1 = new Collection(pokemon_Name, yelpStore);
+                Collection collection1 = new Collection(pokemon_Name, pkmnId, yelpStore);
                 collection.add(collection1);
-
 
                 cursor.moveToNext();
             }
@@ -196,8 +196,6 @@ public class PokemonBusinessSQLiteOpenHelper extends SQLiteOpenHelper {
         return collection;
 
     }
-
-
     //todo test all dbhelper methods
 
     public boolean storeTableIsEmpty() {

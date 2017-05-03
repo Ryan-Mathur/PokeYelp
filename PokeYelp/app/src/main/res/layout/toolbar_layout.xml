@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="horizontal" android:layout_width="match_parent"
+    android:layout_height="60dp"
+    android:elevation="4dp"
+    android:background="#a61907">
+
+    <TextView
+        android:id="@+id/goto_home_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Pokemon Yelp"
+        android:textColor="#fff"
+        android:textSize="20dp"
+        android:layout_gravity="center"
+        android:layout_marginLeft="10dp"/>
+
+
+<RelativeLayout
+    android:layout_width="wrap_content"
+    android:layout_height="match_parent">
+
+    <ImageView
+        android:id="@+id/goto_leaderboard_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@android:drawable/ic_menu_share"
+        android:layout_marginRight="20dp"
+        android:layout_alignParentRight="true"
+        android:layout_centerVertical="true"
+        />
+
+
+    <ImageView
+        android:id="@+id/goto_collection_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@android:drawable/ic_dialog_info"
+        android:layout_marginRight="20dp"
+        android:layout_centerVertical="true"
+        android:layout_toLeftOf="@id/goto_leaderboard_button"
+        />
+
+    <ImageView
+        android:id="@+id/go_to_search_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@android:drawable/ic_menu_search"
+        android:layout_marginRight="20dp"
+        android:layout_centerVertical="true"
+        android:layout_toLeftOf="@id/goto_collection_button"
+        />
+
+
+    
+
+
+
+
+</RelativeLayout>
+
+
+</LinearLayout>

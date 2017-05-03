@@ -7,6 +7,7 @@ import android.view.View;
 import android.widget.Button;
 
 import pokeyelp.grat.team.pokemonyelp.R;
+import pokeyelp.grat.team.pokemonyelp.activity_collection.CollectionActivity;
 import pokeyelp.grat.team.pokemonyelp.activity_search.SearchActivity;
 
 public class HomeActivity extends AppCompatActivity {
@@ -22,6 +23,17 @@ public class HomeActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(v.getContext(), SearchActivity.class);
+                v.getContext().startActivity(intent);
+
+
+            }
+        });
+
+        Button collectionButton = (Button) findViewById(R.id.tocollection_activity);
+        collectionButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(v.getContext(), CollectionActivity.class);
                 v.getContext().startActivity(intent);
             }
         });

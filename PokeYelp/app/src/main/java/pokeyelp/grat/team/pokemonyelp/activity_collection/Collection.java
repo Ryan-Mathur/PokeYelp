@@ -6,12 +6,17 @@ package pokeyelp.grat.team.pokemonyelp.activity_collection;
 
 public class Collection {
 
-    private Long mId;
+    private int mId;
     private String mPokemonName, mYelpStore;
 
-    public Collection(String pokemonName, String yelpStore) {
+    public Collection(String pokemonName, int id, String yelpStore) {
         mPokemonName = pokemonName;
+        mId = id;
         mYelpStore = yelpStore;
+    }
+
+    public int getId() {
+        return mId;
     }
 
     public String getPokemonName() {
