@@ -16,8 +16,6 @@ public class Store {
         mBookmark = bookmark;
     }
 
-
-
     public String getPokemonName() {
         return mPokemonName;
     }

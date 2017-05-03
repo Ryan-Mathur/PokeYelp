@@ -94,6 +94,7 @@ public class LoadingActivity extends AppCompatActivity {
                 //here we return the actual access code, this triggers the onPostExecute method below
                 return tokenBlackGuy.getString("access_token");
             }
+
             //these are all the possible exceptions, I didn't really do much with this except insult the user.
             catch (IOException e) {
                 e.printStackTrace();
