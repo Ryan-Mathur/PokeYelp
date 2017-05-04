@@ -41,8 +41,6 @@ public class MyJobService extends JobService {
 
         mNotificationManager.notify(NOTIFICATION_ID, mBuilder.build());
 
-        mBuilder.addAction(android.R.drawable.ic_input_add,"Go to catch!",pIntent);
-        mBuilder.addAction(android.R.drawable.ic_input_get,"cancle",null);
 
 
 
