@@ -28,7 +28,7 @@ public class LeaderboardActivity extends AppCompatActivity implements GoogleApiC
     private static final int REQUEST_LEADERBOARD = 1;
     private GoogleApiClient mGoogleApiClient;
     private static int RC_SIGN_IN = 9001;
-    private boolean mResolvingConnectionFailure = false;
+    private boolean mResolvingConnectionFailure;
     private boolean mSignInClicked = false;
     private SignInButton mSignInButton;
     private Button mShowLeaderBoardButton;
