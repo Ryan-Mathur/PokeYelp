@@ -2,4 +2,11 @@
     <string name="app_name">Pokemon Yelp</string>
     <string name="search_button_name">Search</string>
     <string name="check_network">check network connection</string>
+    <string name="leaderboard_leaderboard">CgkI1IS6tJcSEAIQAg</string>
+    <string name="event_pokemon_caught">CgkI1IS6tJcSEAIQAQ</string>
+    <string name="sign_in_to_google">Sign In To Google</string>
+    <string name="sign_out_of_google">Sign Out Of Google</string>
+    <string name="signin_other_error">not signed in</string>
+    <string name="signin_failure">sign in failed</string>
+    <string name="app_id">624759308884</string>
 </resources>
