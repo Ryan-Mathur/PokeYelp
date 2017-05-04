@@ -52,8 +52,8 @@ public class SearchViewAdapter extends RecyclerView.Adapter<SearchViewHolder> {
         }
 
         //these are placeholders for now
-        holder.mRatingView.setImageResource(R.drawable.box);
-        holder.mYelpLogo.setImageResource(R.drawable.box);
+        holder.mRatingView.setImageResource(R.drawable.stars_extra_large_5);
+        holder.mYelpLogo.setImageResource(R.drawable.yelp_trademark_rgb_outline);
 
         holder.mRootView.setOnClickListener(new View.OnClickListener() {
             @Override
