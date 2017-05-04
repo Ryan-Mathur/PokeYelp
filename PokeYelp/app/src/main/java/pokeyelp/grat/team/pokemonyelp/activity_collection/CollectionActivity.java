@@ -32,6 +32,7 @@ public class CollectionActivity extends AppCompatActivity {
         GridLayoutManager gridLayoutManager = new GridLayoutManager(this, 3);
         recyclerView.setLayoutManager(gridLayoutManager);
         collections = mHelper.getYourCollection();
+        //System.out.println("in collection there are " + collections.size());
         mAdapter = new CollectionRecyclerViewAdapater(collections);
         recyclerView.setAdapter(mAdapter);
 

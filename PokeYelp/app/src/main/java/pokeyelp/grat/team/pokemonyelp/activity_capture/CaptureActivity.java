@@ -5,75 +5,86 @@ import android.content.Intent;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 
 import com.koushikdutta.ion.Ion;
-import com.squareup.picasso.Picasso;
 
 import pokeyelp.grat.team.pokemonyelp.R;
-import pokeyelp.grat.team.pokemonyelp.activity_collection.Collection;
-import pokeyelp.grat.team.pokemonyelp.activity_collection.CollectionActivity;
 import pokeyelp.grat.team.pokemonyelp.activity_collection.PokemonBusinessSQLiteOpenHelper;
-import pokeyelp.grat.team.pokemonyelp.activity_search.SearchActivity;
+import pokeyelp.grat.team.pokemonyelp.constants.IntentCode;
 import pokeyelp.grat.team.pokemonyelp.constants.Pokemon;
+import pokeyelp.grat.team.pokemonyelp.gson_pokemon_species.Species;
 import pokeyelp.grat.team.pokemonyelp.helpers.ShareOnSocialMedia;
 
 public class CaptureActivity extends AppCompatActivity {
     public static final String TAG = " CHECKING FOR ERRORS: ";
+    private String mPokemonName;
+    private Species mCurrentPokemon;
+    private String mYelpId;
+    private int mPokemonNumber;
+    private PokemonBusinessSQLiteOpenHelper mHelper;
+    private boolean mCaught = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_capture);
+
+        mPokemonName = getIntent().getStringExtra(IntentCode.POKEMON_NAME_TO_CATCH);
+        mYelpId = getIntent().getStringExtra(IntentCode.YELP_ID_TO_CATCH);
+        mPokemonNumber = getIntent().getIntExtra(IntentCode.POKEMON_NUMBER_TO_CATCH, 0);
+        mHelper = PokemonBusinessSQLiteOpenHelper.getInstance(this);
+
+
         //todo just one pokemon is on the screen 
-        ImageView pokemonSprite = (ImageView) findViewById(R.id.capture_pokemon);
-        String imageUrl = Pokemon.POKEMON_SPRITE_BASE_URL +  + ".gif";
+        final ImageView pokemonSprite = (ImageView) findViewById(R.id.capture_pokemon);
+        String imageUrl = Pokemon.POKEMON_SPRITE_BASE_URL + mPokemonName + ".gif";
         Ion.with(CaptureActivity.this).load(imageUrl).intoImageView(pokemonSprite);
 
         //at the bottom of the screen 
-        final PokemonBusinessSQLiteOpenHelper mHelper = PokemonBusinessSQLiteOpenHelper.getInstance(this);
-        Button captureButton = (Button) findViewById(R.id.capture_button);
-        //todo button saves the pokemon id to the db
+        final Button captureButton = (Button) findViewById(R.id.capture_button);
         captureButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-//                Intent intent = new Intent(CaptureActivity.this, CollectionActivity.class);
-//                intent.putExtra("pokemon_name", "pikachu");
-//                intent.putExtra("pokemon_id", 1);
-//                intent.putExtra("yelp_id", "burger_king");
-//                startActivity(intent);
-                mHelper.addToCollection("pikachu", 1, "burker_king");
-                Log.d(TAG, "CAPTURE ACTIVITY onClick: " );
+
+                if (mCaught){
+                    shareThis();
+
+                } else {
+                    pokemonSprite.setImageResource(R.drawable.pokeball);
+                    mHelper.addToCollection(mPokemonName, mPokemonNumber, mYelpId);
+                    captureButton.setText("Share!");
+
+                    boolean noPokemon = mHelper.storeTableIsEmpty();
+                    mCaught = true;
+
+                    if (noPokemon) {
+                        mHelper.insertPokemonStore(mYelpId, Pokemon.POKEMON_NOT_AVAILABLE);
+                    } else {
+                        mHelper.updatePokemon(mYelpId, Pokemon.POKEMON_NOT_AVAILABLE);
+                    }
+
+                    congratScreen();
+                }
             }
         });
+    }
 
-        //return to screen that they launched from 
-        //dialog that say you captured this pokemon 
-        //with a button for sharing 
+    public void congratScreen() {
         AlertDialog.Builder builder = new AlertDialog.Builder(CaptureActivity.this);
         builder.setTitle("Captured!")
                 .setMessage("Good Job! You caught a pokemon. Keep up the good work.")
                 .setPositiveButton("Share", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        ShareOnSocialMedia.share(CaptureActivity.this, "I caught a Pokemon playing PokemonYelp. Play with me!");
+                        shareThis();
                     }
-                })
-                .setNegativeButton("I'm done.", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        finish();
-                    }
-                })
-                        .show();
+                }).show();
+    }
 
-
-
-
-
-
+    public void shareThis(){
+        ShareOnSocialMedia.share(CaptureActivity.this, "I caught a Pokemon playing PokemonYelp. Play with me!");
     }
 }

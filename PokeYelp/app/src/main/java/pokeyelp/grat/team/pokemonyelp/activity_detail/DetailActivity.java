@@ -31,6 +31,7 @@ import pokeyelp.grat.team.pokemonyelp.R;
 import pokeyelp.grat.team.pokemonyelp.activity_capture.CaptureActivity;
 import pokeyelp.grat.team.pokemonyelp.activity_collection.PokemonBusinessSQLiteOpenHelper;
 import pokeyelp.grat.team.pokemonyelp.constants.Api;
+import pokeyelp.grat.team.pokemonyelp.constants.Game;
 import pokeyelp.grat.team.pokemonyelp.constants.IntentCode;
 import pokeyelp.grat.team.pokemonyelp.constants.Pokemon;
 import pokeyelp.grat.team.pokemonyelp.gson_pokemon_species.Species;
@@ -65,7 +66,6 @@ public class DetailActivity extends AppCompatActivity implements GoogleApiClient
         mYelpToken = singleton.getToken();
 
         getCurrentBusiness();
-        getCurrentPokemon();
 
         if (mGoogleApiClient == null) {
             mGoogleApiClient = new GoogleApiClient.Builder(this)
@@ -190,20 +190,23 @@ public class DetailActivity extends AppCompatActivity implements GoogleApiClient
         pokemonLocation.setLatitude(mBusinessDetail.getCoordinates().getLatitude());
         pokemonLocation.setLongitude(mBusinessDetail.getCoordinates().getLongitude());
         double distance = mLocation.distanceTo(pokemonLocation);
-        if (distance > 50){
+        if (distance > Game.MIN_CAPTURE_DISTANCE){
             Toast.makeText(this, "You are too far away! " +distance, Toast.LENGTH_SHORT).show();
-        }else{
-//            Intent catchIntent = new Intent(DetailActivity.this, CaptureActivity.class);
-//            catchIntent.putExtra(IntentCode.POKEMON_NAME_TO_CATCH, mCurrentPokemon.getName());
-//            catchIntent.putExtra(IntentCode.POKEMON_NUMBER_TO_CATCH, (int) (mCurrentPokemon.getPokedexNumbers().get(0).getEntryNumber()));
-//            catchIntent.putExtra(IntentCode.YELP_ID_TO_CATCH, mBusinessDetail.getId());
-//            startActivityForResult(catchIntent, IntentCode.CATCH_RESULT_CODE);
-            mDbHelper.updatePokemon(mBusinessDetail.getId(), Pokemon.POKEMON_NOT_AVAILABLE);
-            mDbHelper.addToCollection(mCurrentPokemon.getName(), mCurrentPokemon.getPokedexNumbers().get(0).getEntryNumber(), mBusinessDetail.getId());
-            hidePokemon();
+        }
+        else{
+            Intent catchIntent = new Intent(DetailActivity.this, CaptureActivity.class);
+            catchIntent.putExtra(IntentCode.POKEMON_NAME_TO_CATCH, mCurrentPokemon.getName());
+            catchIntent.putExtra(IntentCode.POKEMON_NUMBER_TO_CATCH, (int) (mCurrentPokemon.getPokedexNumbers().get(0).getEntryNumber()));
+            catchIntent.putExtra(IntentCode.YELP_ID_TO_CATCH, mBusinessDetail.getId());
+            startActivity(catchIntent);
         }
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        getCurrentPokemon();
+    }
 
     @Override
     public void onConnected(@Nullable Bundle bundle) {
@@ -269,7 +272,7 @@ public class DetailActivity extends AppCompatActivity implements GoogleApiClient
                 Gson gson = new Gson();
                 pokemonSpecies = gson.fromJson(speciesResponse.body().string(), Species.class);
                 System.out.println(pokemonSpecies.getName() + " " + pokemonSpecies.getCaptureRate());
-                if (pokemonSpecies.getCaptureRate()>3) {
+                if (pokemonSpecies.getCaptureRate()>0) {
                     return pokemonSpecies;
                 }
             } catch (IOException e) {

@@ -5,10 +5,11 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
 
     tools:context="pokeyelp.grat.team.pokemonyelp.activity_collection.CollectionActivity">
 
-    <include layout="@layout/toolbar_layout" />
+    <include layout="@layout/toolbar_layout"/>
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/collection_recyclerview"
