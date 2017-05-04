@@ -190,7 +190,7 @@ public class DetailActivity extends AppCompatActivity implements GoogleApiClient
         pokemonLocation.setLatitude(mBusinessDetail.getCoordinates().getLatitude());
         pokemonLocation.setLongitude(mBusinessDetail.getCoordinates().getLongitude());
         double distance = mLocation.distanceTo(pokemonLocation);
-        if (distance > 25){
+        if (distance > 50){
             Toast.makeText(this, "You are too far away! " +distance, Toast.LENGTH_SHORT).show();
         }else{
 //            Intent catchIntent = new Intent(DetailActivity.this, CaptureActivity.class);
