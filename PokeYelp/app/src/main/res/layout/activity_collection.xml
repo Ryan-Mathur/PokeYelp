@@ -8,6 +8,8 @@
 
     tools:context="pokeyelp.grat.team.pokemonyelp.activity_collection.CollectionActivity">
 
+    <include layout="@layout/toolbar_layout" />
+
     <android.support.v7.widget.RecyclerView
         android:id="@+id/collection_recyclerview"
         android:layout_width="wrap_content"
