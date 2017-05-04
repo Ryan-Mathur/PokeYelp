@@ -4,19 +4,17 @@ package pokeyelp.grat.team.pokemonyelp.activity_collection;
  * Created by Admin on 5/1/17.
  */
 
-public class PokemonClass {
+public class Store {
 
 
     private String mPokemonName, mYelpId;
     private Boolean mBookmark;
 
-    public PokemonClass( String pokemonName, String yelpId, Boolean bookmark) {
+    public Store(String pokemonName, String yelpId, Boolean bookmark) {
         mPokemonName = pokemonName;
         mYelpId = yelpId;
         mBookmark = bookmark;
     }
-
-
 
     public String getPokemonName() {
         return mPokemonName;
