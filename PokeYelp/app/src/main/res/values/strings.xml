@@ -10,4 +10,5 @@
     <string name="signin_failure">sign in failed</string>
     <string name="app_id">624759308884</string>
     <string name="show_leaderboards">Show LeaderBoards</string>
+    <string name="capture_button">Catch the Pokemon</string>
 </resources>
