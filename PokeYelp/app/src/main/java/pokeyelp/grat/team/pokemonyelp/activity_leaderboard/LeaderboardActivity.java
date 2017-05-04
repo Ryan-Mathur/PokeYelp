@@ -16,6 +16,10 @@ import com.google.android.gms.games.Games;
 import com.google.example.games.basegameutils.BaseGameUtils;
 
 import pokeyelp.grat.team.pokemonyelp.R;
+import pokeyelp.grat.team.pokemonyelp.activity_collection.CollectionActivity;
+import pokeyelp.grat.team.pokemonyelp.activity_collection.PokemonBusinessSQLiteOpenHelper;
+import pokeyelp.grat.team.pokemonyelp.activity_search.SearchActivity;
+import pokeyelp.grat.team.pokemonyelp.helpers.ToolBar;
 
 public class LeaderboardActivity extends AppCompatActivity implements GoogleApiClient.ConnectionCallbacks,
         GoogleApiClient.OnConnectionFailedListener, View.OnClickListener {
@@ -40,6 +44,11 @@ public class LeaderboardActivity extends AppCompatActivity implements GoogleApiC
         // Get references to views
         mSignInButton = (SignInButton) findViewById(R.id.sign_in_button);
         mShowLeaderBoardButton = (Button) findViewById(R.id.show_leaderboard_button);
+
+
+        //reference to view for toolbar
+        ToolBar.setupSimpleToolbar(findViewById(android.R.id.content));
+
 
         //Set those views to onclick listener
         mSignInButton.setOnClickListener(this);
@@ -134,6 +143,7 @@ public class LeaderboardActivity extends AppCompatActivity implements GoogleApiC
 
     }
 
+
     private void signInClicked() {
         //click sign in for google services
         mSignInClicked = true;
@@ -145,8 +155,9 @@ public class LeaderboardActivity extends AppCompatActivity implements GoogleApiC
     private void showLeaderBoardClicked() {
 
         if (mGoogleApiClient != null && mGoogleApiClient.isConnected()) {
-            //add scores based on unique pokemon caught
-            Games.Leaderboards.submitScore(mGoogleApiClient, LEADERBOARD_ID, 3);
+            //add scores based on pokemon caught to leaderboard
+            int pokemonCaptured = PokemonBusinessSQLiteOpenHelper.getInstance(LeaderboardActivity.this).getYourCollection().size();
+            Games.Leaderboards.submitScore(mGoogleApiClient, LEADERBOARD_ID, pokemonCaptured);
             //this is what actually shows the leaderboard
             startActivityForResult(Games.Leaderboards.getLeaderboardIntent(mGoogleApiClient,
                     LEADERBOARD_ID), REQUEST_LEADERBOARD);
