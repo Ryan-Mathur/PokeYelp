@@ -29,7 +29,7 @@ public class LeaderboardActivity extends AppCompatActivity implements GoogleApiC
     private GoogleApiClient mGoogleApiClient;
     private static int RC_SIGN_IN = 9001;
     private boolean mResolvingConnectionFailure;
-    private boolean mSignInClicked = false;
+    private boolean mSignInClicked;
     private SignInButton mSignInButton;
     private Button mShowLeaderBoardButton;
     private boolean mAutoStartSignInFlow;
