@@ -37,7 +37,7 @@ public class HomeActivity extends AppCompatActivity {
                 .setPeriodic(12000000)     //this for test the jobservice and notification
                 .build();
 
-        jobScheduler.schedule(periodicJobInfo);
+        //jobScheduler.schedule(periodicJobInfo);
 
 
 
