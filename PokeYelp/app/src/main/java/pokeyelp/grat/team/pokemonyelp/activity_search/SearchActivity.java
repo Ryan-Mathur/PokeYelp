@@ -23,6 +23,7 @@ import android.widget.Toast;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationListener;
+import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
 import com.google.gson.Gson;
 
@@ -184,10 +185,9 @@ public class SearchActivity extends AppCompatActivity implements GoogleApiClient
             Location lastLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
 
             if (lastLocation == null) {
-//                LocationRequest locationRequest = LocationRequest.create()
-//                        .setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
-//                LocationServices.FusedLocationApi.requestLocationUpdates(mGoogleApiClient, locationRequest, this);
-                Toast.makeText(this, "Cannot find location", Toast.LENGTH_SHORT).show();
+                LocationRequest locationRequest = LocationRequest.create()
+                        .setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
+                LocationServices.FusedLocationApi.requestLocationUpdates(mGoogleApiClient, locationRequest, this);
 
             } else {
                 mLat = String.valueOf(lastLocation.getLatitude());

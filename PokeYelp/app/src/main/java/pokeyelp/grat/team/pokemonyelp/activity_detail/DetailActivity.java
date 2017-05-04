@@ -29,6 +29,7 @@ import okhttp3.Request;
 import okhttp3.Response;
 import pokeyelp.grat.team.pokemonyelp.R;
 import pokeyelp.grat.team.pokemonyelp.activity_capture.CaptureActivity;
+import pokeyelp.grat.team.pokemonyelp.activity_collection.PokemonBusinessSQLiteOpenHelper;
 import pokeyelp.grat.team.pokemonyelp.constants.Api;
 import pokeyelp.grat.team.pokemonyelp.constants.IntentCode;
 import pokeyelp.grat.team.pokemonyelp.constants.Pokemon;
@@ -39,25 +40,33 @@ import pokeyelp.grat.team.pokemonyelp.singleton.MrSingleton;
 public class DetailActivity extends AppCompatActivity implements GoogleApiClient.ConnectionCallbacks,
         GoogleApiClient.OnConnectionFailedListener, LocationListener {
 
+    private String mYelpId;
     private String mYelpToken;
+    private BusinessDetail mBusinessDetail;
     private GetYelpBusiness mApiTask;
     private GetPokemon mPokemonTask;
     private String mDBPokemon;
     private Species mCurrentPokemon;
     private Location mLocation;
-    private BusinessDetail mBusinessDetail;
     private static final int REQUEST_LOCATION = 15;
     private GoogleApiClient mGoogleApiClient;
+    private PokemonBusinessSQLiteOpenHelper mDbHelper;
+    private MrSingleton singleton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detail);
 
-        mYelpToken = MrSingleton.getInstance().getToken();
-        String yelpId = getIntent().getStringExtra(IntentCode.BUSINESS_ID_TO_DETAILS);
-        mApiTask = new GetYelpBusiness();
-        mApiTask.execute(Api.YELP_BASE_URL + "businesses/" + yelpId);
+        singleton = MrSingleton.getInstance();
+
+
+        mDbHelper = PokemonBusinessSQLiteOpenHelper.getInstance(this);
+        mYelpToken = singleton.getToken();
+
+        getCurrentBusiness();
+        getCurrentPokemon();
+
         if (mGoogleApiClient == null) {
             mGoogleApiClient = new GoogleApiClient.Builder(this)
                     .addConnectionCallbacks(this)
@@ -67,10 +76,57 @@ public class DetailActivity extends AppCompatActivity implements GoogleApiClient
         }
     }
 
-    
+    public void getCurrentBusiness(){
+
+        int indexForCurrent = singleton.indexOfYelpId(mYelpId);
+        if (indexForCurrent!=-1){
+            mBusinessDetail = singleton.getLocalBusinessCache().get(indexForCurrent);
+            setupViews(mBusinessDetail);
+        } else {
+            mYelpId = getIntent().getStringExtra(IntentCode.BUSINESS_ID_TO_DETAILS);
+            mApiTask = new GetYelpBusiness();
+            mApiTask.execute(Api.YELP_BASE_URL + "businesses/" + mYelpId);
+        }
+    }
+
+    public void getCurrentPokemon(){
+        mDBPokemon = mDbHelper.searchForPokemon(mYelpId);
+        if (mDBPokemon==null){
+            findViewById(R.id.detail_button_scan_pokemon).setVisibility(View.VISIBLE);
+            findViewById(R.id.detail_button_scan_pokemon).setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if(mDBPokemon!=null){
+                        Toast.makeText(DetailActivity.this, "You already scanned", Toast.LENGTH_SHORT).show();
+                        return;
+                    }
+                    if (mPokemonTask != null && mPokemonTask.getStatus().equals(AsyncTask.Status.RUNNING)){
+                        Toast.makeText(DetailActivity.this, "Already Scanning", Toast.LENGTH_SHORT).show();
+                    } else {
+                        Toast.makeText(DetailActivity.this, "Scanning", Toast.LENGTH_SHORT).show();
+                        mPokemonTask = new GetPokemon();
+                        mPokemonTask.execute();
+                    }
+                }
+            });
+        } else if (mDBPokemon.equals(Pokemon.POKEMON_NOT_AVAILABLE)){
+            hidePokemon();
+        } else {
+            int indexForCurrent = singleton.indexOfSpeciesName(mDBPokemon);
+            if (indexForCurrent!=-1){
+                System.out.println("Getting from cache");
+                mCurrentPokemon = singleton.getLocalSpeciesCache().get(indexForCurrent);
+                showPokemon();
+            } else {
+                mPokemonTask = new GetPokemon();
+                mPokemonTask.execute();
+            }
+        }
+    }
+
+
 
     public void setupViews(BusinessDetail business){
-        mBusinessDetail = business;
         String categories = "";
         for (int i = 0; i < business.getCategories().size(); i++) {
             categories += business.getCategories().get(i).getTitle() + " ";
@@ -78,53 +134,42 @@ public class DetailActivity extends AppCompatActivity implements GoogleApiClient
         ((TextView) findViewById(R.id.detail_name)).setText(business.getName());
         ((TextView) findViewById(R.id.detail_address)).setText(business.getLocation().getAddress1());
         ((TextView) findViewById(R.id.detail_categories)).setText(categories);
-        findViewById(R.id.detail_button_scan_pokemon).setVisibility(View.VISIBLE);
-        findViewById(R.id.detail_button_scan_pokemon).setOnClickListener(new View.OnClickListener() {
+
+    }
+
+    public void showPokemon(){
+        String pokemonName = mCurrentPokemon.getName();
+        Toast.makeText(DetailActivity.this, pokemonName, Toast.LENGTH_SHORT).show();
+        ImageView pokemonSprite = (ImageView) findViewById(R.id.detail_pokemon_picture);
+        pokemonSprite.setVisibility(View.VISIBLE);
+        TextView catchButton = (TextView) findViewById(R.id.detail_button_catch_pokemon);
+        catchButton.setVisibility(View.VISIBLE);
+        String imageUrl = Pokemon.POKEMON_SPRITE_BASE_URL + pokemonName +".gif";
+        Ion.with(DetailActivity.this).load(imageUrl).intoImageView(pokemonSprite);
+        catchButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (mPokemonTask != null && mPokemonTask.getStatus().equals(AsyncTask.Status.RUNNING)){
-                    Toast.makeText(DetailActivity.this, "Already Scanning", Toast.LENGTH_SHORT).show();
+                if(mGoogleApiClient.isConnected()){
+                    getLocation();
                 } else {
-                    Toast.makeText(DetailActivity.this, "Scanning", Toast.LENGTH_SHORT).show();
-                    mPokemonTask = new GetPokemon();
-                    mPokemonTask.execute();
+                    mGoogleApiClient.connect();
                 }
             }
         });
     }
 
-    public void showPokemon(){
-        if (mCurrentPokemon == null) {
-            Toast.makeText(DetailActivity.this, "No Pokemon Found!", Toast.LENGTH_SHORT).show();
-        } else {
-            String pokemonName = mCurrentPokemon.getName();
-            Toast.makeText(DetailActivity.this, pokemonName, Toast.LENGTH_SHORT).show();
-            ImageView pokemonSprite = (ImageView) findViewById(R.id.detail_pokemon_picture);
-            pokemonSprite.setVisibility(View.VISIBLE);
-            TextView catchButton = (TextView) findViewById(R.id.detail_button_catch_pokemon);
-            catchButton.setVisibility(View.VISIBLE);
-            String imageUrl = Pokemon.POKEMON_SPRITE_BASE_URL + pokemonName +".gif";
-            Ion.with(DetailActivity.this).load(imageUrl).intoImageView(pokemonSprite);
-            catchButton.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    if(mGoogleApiClient.isConnected()){
-                        getLocation();
-                    } else {
-                        mGoogleApiClient.connect();
-                    }
-                }
-            });
-        }
-    }
+    public void hidePokemon(){
+        findViewById(R.id.detail_pokemon_picture).setVisibility(View.INVISIBLE);
+        findViewById(R.id.detail_button_catch_pokemon).setVisibility(View.INVISIBLE);
+        findViewById(R.id.detail_button_scan_pokemon).setVisibility(View.INVISIBLE);
 
+    }
 
     public void getLocation(){
 
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
 
-            mLocation = LocationServices.FusedLocationApi.getLastLocation(
-                    mGoogleApiClient);
+            mLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
 
             if (mLocation!=null) {
                 catchPokemon();
@@ -145,16 +190,18 @@ public class DetailActivity extends AppCompatActivity implements GoogleApiClient
         pokemonLocation.setLatitude(mBusinessDetail.getCoordinates().getLatitude());
         pokemonLocation.setLongitude(mBusinessDetail.getCoordinates().getLongitude());
         double distance = mLocation.distanceTo(pokemonLocation);
-        if (distance > 10){
-            Toast.makeText(this, "You are too far away!", Toast.LENGTH_SHORT).show();
+        if (distance > 25){
+            Toast.makeText(this, "You are too far away! " +distance, Toast.LENGTH_SHORT).show();
         }else{
-            Intent catchIntent = new Intent(DetailActivity.this, CaptureActivity.class);
-            catchIntent.putExtra(IntentCode.POKEMON_NAME_TO_CATCH, mCurrentPokemon.getName());
-            catchIntent.putExtra(IntentCode.POKEMON_NUMBER_TO_CATCH, (int) (mCurrentPokemon.getPokedexNumbers().get(0).getEntryNumber()));
-            catchIntent.putExtra(IntentCode.YELP_ID_TO_CATCH, mBusinessDetail.getId());
-            startActivityForResult(catchIntent, IntentCode.CATCH_RESULT_CODE);
+//            Intent catchIntent = new Intent(DetailActivity.this, CaptureActivity.class);
+//            catchIntent.putExtra(IntentCode.POKEMON_NAME_TO_CATCH, mCurrentPokemon.getName());
+//            catchIntent.putExtra(IntentCode.POKEMON_NUMBER_TO_CATCH, (int) (mCurrentPokemon.getPokedexNumbers().get(0).getEntryNumber()));
+//            catchIntent.putExtra(IntentCode.YELP_ID_TO_CATCH, mBusinessDetail.getId());
+//            startActivityForResult(catchIntent, IntentCode.CATCH_RESULT_CODE);
+            mDbHelper.updatePokemon(mBusinessDetail.getId(), Pokemon.POKEMON_NOT_AVAILABLE);
+            mDbHelper.addToCollection(mCurrentPokemon.getName(), mCurrentPokemon.getPokedexNumbers().get(0).getEntryNumber(), mBusinessDetail.getId());
+            hidePokemon();
         }
-
     }
 
 
@@ -205,30 +252,29 @@ public class DetailActivity extends AppCompatActivity implements GoogleApiClient
         protected Species doInBackground(Void... params) {
             OkHttpClient client = new OkHttpClient();
             Species pokemonSpecies = null;
+            String searchPokemon = mDBPokemon;
 
-            int tries = 3;
+            if(searchPokemon == null){
+                int pokemonRandom = (int) (Pokemon.POKEMON_NUMBERS * Math.random());
+                pokemonRandom++;
+                searchPokemon = String.valueOf(pokemonRandom);
+            }
 
-                while(tries>0) {
-                    int pokemonRandom = (int) (Pokemon.POKEMON_NUMBERS * Math.random());
-                    pokemonRandom++;
-                    Request speciesRequest = new Request.Builder()
-                            .url(Api.POKEMON_BASE_URL + "pokemon-species/" + pokemonRandom)
-                            .build();
+            Request speciesRequest = new Request.Builder()
+                    .url(Api.POKEMON_BASE_URL + "pokemon-species/" + searchPokemon)
+                    .build();
 
-                    try {
-                        Response speciesResponse = client.newCall(speciesRequest).execute();
-                        Gson gson = new Gson();
-                        pokemonSpecies = gson.fromJson(speciesResponse.body().string(), Species.class);
-                        System.out.println(pokemonSpecies.getName() + " " + pokemonSpecies.getCaptureRate());
-                        if (pokemonSpecies.getCaptureRate()>3) {
-                            return pokemonSpecies;
-                        }
-                        tries--;
-
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
+            try {
+                Response speciesResponse = client.newCall(speciesRequest).execute();
+                Gson gson = new Gson();
+                pokemonSpecies = gson.fromJson(speciesResponse.body().string(), Species.class);
+                System.out.println(pokemonSpecies.getName() + " " + pokemonSpecies.getCaptureRate());
+                if (pokemonSpecies.getCaptureRate()>3) {
+                    return pokemonSpecies;
                 }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
 
             return null;
         }
@@ -236,8 +282,17 @@ public class DetailActivity extends AppCompatActivity implements GoogleApiClient
         @Override
         protected void onPostExecute(Species pokemon) {
             super.onPostExecute(pokemon);
-            mCurrentPokemon = pokemon;
-            showPokemon();
+            if (pokemon != null) {
+                mCurrentPokemon = pokemon;
+                if (mDBPokemon ==null){
+                    mDBPokemon = pokemon.getName();
+                    mDbHelper.insertPokemonStore(mYelpId, pokemon.getName());
+                }
+                System.out.println(singleton.addSpecies(mCurrentPokemon));
+                showPokemon();
+            } else {
+                Toast.makeText(DetailActivity.this, "Can't retrieve pokemon! Please try again!", Toast.LENGTH_SHORT).show();
+            }
         }
     }
 
@@ -284,7 +339,9 @@ public class DetailActivity extends AppCompatActivity implements GoogleApiClient
         protected void onPostExecute(BusinessDetail business) {
             super.onPostExecute(business);
             if (business!=null){
-                setupViews(business);
+                mBusinessDetail = business;
+                singleton.addBusiness(mBusinessDetail);
+                setupViews(mBusinessDetail);
             } else {
                 Toast.makeText(DetailActivity.this, "Business not found", Toast.LENGTH_SHORT).show();
             }
