@@ -1,49 +1,58 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:padding="10dp"
-    android:id="@+id/root_view_for_search_list"
-    android:orientation="vertical">
+    android:id="@+id/root_view_for_search_list">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <ImageView
+            android:id="@+id/search_imageview"
+            android:layout_width="75dp"
+            android:layout_height="75dp"
+            android:background="#932222"/>
+
+        <TextView
+            android:id="@+id/search_business_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="TEST" />
+
+        <TextView
+            android:id="@+id/search_address"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="TEST" />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+            <ImageView
+                android:id="@+id/search_fivestars"
+                android:layout_width="100dp"
+                android:layout_height="25dp"
+                android:background="#2c5c6b"/>
+            <TextView
+                android:id="@+id/search_numbofreviews"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="TEST" />
+
+        </LinearLayout>
+
+
+    </LinearLayout>
 
     <ImageView
-        android:id="@+id/search_imageview"
+        android:id="@+id/search_yelplogo"
+        android:layout_gravity="bottom|right"
         android:layout_width="75dp"
         android:layout_height="75dp"
-        android:background="#932222"/>
+        android:background="#2b0a56"/>
 
-    <TextView
-        android:id="@+id/search_business_name"
-        android:layout_below="@+id/search_imageview"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="TEST" />
 
-    <TextView
-        android:id="@+id/search_address"
-        android:layout_below="@+id/search_business_name"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="TEST" />
-
-    <ImageView
-        android:id="@+id/search_fivestars"
-        android:layout_below="@id/search_address"
-        android:layout_width="75dp"
-        android:layout_height="75dp"
-        android:background="#2c5c6b"/>
-    <TextView
-        android:id="@+id/search_numbofreviews"
-        android:layout_below="@id/search_fivestars"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="TEST" />
-
-   <ImageView
-       android:id="@+id/search_yelplogo"
-       android:layout_below="@id/search_numbofreviews"
-       android:layout_width="75dp"
-       android:layout_height="75dp"
-       android:background="#2b0a56"/>
-
-</RelativeLayout>
+</FrameLayout>
