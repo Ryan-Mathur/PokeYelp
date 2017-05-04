@@ -34,8 +34,7 @@
             <ImageView
                 android:id="@+id/search_fivestars"
                 android:layout_width="100dp"
-                android:layout_height="25dp"
-                android:background="#2c5c6b"/>
+                android:layout_height="25dp"/>
             <TextView
                 android:id="@+id/search_numbofreviews"
                 android:layout_width="wrap_content"
@@ -52,7 +51,7 @@
         android:layout_gravity="bottom|right"
         android:layout_width="75dp"
         android:layout_height="75dp"
-        android:background="#2b0a56"/>
+        />
 
 
 </FrameLayout>
