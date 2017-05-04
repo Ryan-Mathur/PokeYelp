@@ -17,33 +17,31 @@ import pokeyelp.grat.team.pokemonyelp.activity_home.HomeActivity;
  */
 
 public class MyJobService extends JobService {
-    public static final int NOTIFICATION_ID=1;
-
+    public static final int NOTIFICATION_ID = 1;
 
 
     @Override
     public boolean onStartJob(JobParameters params) {
 
         Intent intent = new Intent(this, HomeActivity.class);
-        PendingIntent pIntent = PendingIntent.getActivity(this, (int) System.currentTimeMillis(), intent, 0);
+        PendingIntent pIntent = PendingIntent.getActivity(this, (int) System.currentTimeMillis(),
+                intent, PendingIntent.FLAG_CANCEL_CURRENT);
+
 
         NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(this);
         mBuilder.setSmallIcon(android.R.drawable.ic_dialog_alert);
         mBuilder.setAutoCancel(true);
         mBuilder.setContentIntent(pIntent);
         mBuilder.setPriority(Notification.PRIORITY_DEFAULT);
-        mBuilder.setContentInfo("Hi, The Pokemons are here again, time to catch!");
+        mBuilder.setContentText("Hi, The Pokemons are here again, time to catch!");
 
 
 
         NotificationManager mNotificationManager =
                 (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
 
+
         mNotificationManager.notify(NOTIFICATION_ID, mBuilder.build());
-
-        mBuilder.addAction(android.R.drawable.ic_input_add,"Go to catch!",pIntent);
-        mBuilder.addAction(android.R.drawable.ic_input_get,"cancle",null);
-
 
 
         PokemonBusinessSQLiteOpenHelper mDBOpenHeloper = PokemonBusinessSQLiteOpenHelper.getInstance(getApplicationContext());
@@ -57,4 +55,6 @@ public class MyJobService extends JobService {
     public boolean onStopJob(JobParameters params) {
         return true;
     }
+
+
 }
