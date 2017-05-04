@@ -4,6 +4,7 @@ import android.app.job.JobInfo;
 import android.app.job.JobScheduler;
 import android.content.ComponentName;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
@@ -17,7 +18,12 @@ import pokeyelp.grat.team.pokemonyelp.helpers.ToolBar;
 
 public class HomeActivity extends AppCompatActivity {
 
+
     public static final int PERIODIC_JOB_ID = 1;
+
+    private static final String TAG = "HomeActivity";
+    public static final String SHAREPREFERENCE_KEY= "SHARESHARE_KEY";
+    public static final String SCHEDULE_KEY="keykeykye";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -27,19 +33,27 @@ public class HomeActivity extends AppCompatActivity {
 
         ToolBar.setupSimpleToolbar(findViewById(android.R.id.content));
 
+
         JobScheduler jobScheduler = (JobScheduler) getSystemService(JOB_SCHEDULER_SERVICE);
 
+       int size = jobScheduler.getAllPendingJobs().size();
+
+        if(size==0) {
 
 
-
-        JobInfo periodicJobInfo = new JobInfo.Builder(PERIODIC_JOB_ID,new ComponentName(this,MyJobService.class))
-      //          .setPeriodic(86400000)    // this is the real timing for 24 hrs
-                .setPeriodic(12000000)     //this for test the jobservice and notification
-                .build();
-
-        jobScheduler.schedule(periodicJobInfo);
+            SharedPreferences sp =getSharedPreferences(SHAREPREFERENCE_KEY,MODE_PRIVATE);
+            sp.edit().putBoolean(SCHEDULE_KEY,false)
+            .commit();
 
 
+            JobInfo periodicJobInfo = new JobInfo.Builder(PERIODIC_JOB_ID, new ComponentName(this, MyJobService.class))
+                    .setPeriodic(120000)//this for test the jobservice and notification
+                    .build();
+
+
+            jobScheduler.schedule(periodicJobInfo);
+
+        }
 
 
         //Setup search button to take you from main page to search page
@@ -63,6 +77,12 @@ public class HomeActivity extends AppCompatActivity {
             }
         });
     }
+
+
+
+
+
+
 
 
 
