@@ -15,10 +15,16 @@
         android:text="Name"/>
 
     <TextView
-        android:id="@+id/detail_adress"
+        android:id="@+id/detail_address"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Address"/>
+
+    <TextView
+        android:id="@+id/detail_categories"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Categories"/>
 
     <TextView
         android:id="@+id/detail_button_scan_pokemon"
@@ -34,9 +40,13 @@
         android:layout_height="100dp"
         android:visibility="invisible"/>
 
-    <View
-        android:id="@+id/gifview_test"
-        android:layout_width="100dp"
-        android:layout_height="100dp"/>
+    <TextView
+        android:id="@+id/detail_button_catch_pokemon"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="10dp"
+        android:visibility="invisible"
+        android:text="Catch Pokemon!"/>
+
 
 </LinearLayout>

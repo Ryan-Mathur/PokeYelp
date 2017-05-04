@@ -32,7 +32,7 @@ public class CollectionActivity extends AppCompatActivity {
         mAdapter = new CollectionRecyclerViewAdapater(collections);
         recyclerView.setAdapter(mAdapter);
 
-        mHelper.getYourCollection();
+        //mHelper.getYourCollection();
 
 
         /*------- TEST --------- CODE ------------------------

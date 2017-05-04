@@ -77,6 +77,7 @@
                 android:id="@+id/search_result_recyvler_View"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:nestedScrollingEnabled="false"
                 android:layout_below="@id/search_linerlayout_view">
 
             </android.support.v7.widget.RecyclerView>
