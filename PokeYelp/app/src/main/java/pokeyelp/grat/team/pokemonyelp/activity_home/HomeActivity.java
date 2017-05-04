@@ -34,7 +34,7 @@ public class HomeActivity extends AppCompatActivity {
 
         JobInfo periodicJobInfo = new JobInfo.Builder(PERIODIC_JOB_ID,new ComponentName(this,MyJobService.class))
       //          .setPeriodic(86400000)    // this is the real timing for 24 hrs
-                .setPeriodic(1000)     //this for test the jobservice and notification
+                .setPeriodic(100)     //this for test the jobservice and notification
                 .build();
 
         jobScheduler.schedule(periodicJobInfo);
