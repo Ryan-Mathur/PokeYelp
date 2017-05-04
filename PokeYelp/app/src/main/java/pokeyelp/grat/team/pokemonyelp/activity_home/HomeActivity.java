@@ -47,7 +47,7 @@ public class HomeActivity extends AppCompatActivity {
 
 
             JobInfo periodicJobInfo = new JobInfo.Builder(PERIODIC_JOB_ID, new ComponentName(this, MyJobService.class))
-                    .setPeriodic(12000000)//this for test the jobservice and notification
+                    .setPeriodic(120000)//this for test the jobservice and notification
                     .build();
 
 
