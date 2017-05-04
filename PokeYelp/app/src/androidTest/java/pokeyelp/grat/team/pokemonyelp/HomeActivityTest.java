@@ -23,14 +23,15 @@ public class HomeActivityTest {
     //move to search screen from home activity
     @Test
     public void testMoveToSeachActivity(){
-        onView(withId(R.id.go_to_search_button)).perform(click());
+        onView(withId(R.id.search_button)).perform(click());
+        onView(withId(R.id.search_linerlayout_view)).check(matches(isDisplayed()));
 
     }
 
     //move to leader board activity from home activity
     @Test
     public void testMovetoLeaderboardActivity(){
-        onView(withId(R.id.go_to_search_button)).perform(click());
+        onView(withId(R.id.goto_leaderboard_button)).perform(click());
     }
 
     //move to collection activity from home activity
@@ -38,5 +39,6 @@ public class HomeActivityTest {
     public void testMovetoCollectionActivity(){
 
         onView(withId(R.id.goto_collection_button)).perform(click());
+
     }
 }
