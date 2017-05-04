@@ -27,9 +27,10 @@ public class LeaderboardActivity extends AppCompatActivity implements GoogleApiC
     private boolean mResolvingConnectionFailure = false;
     private boolean mSignInClicked = false;
     private SignInButton mSignInButton;
-    private Button mShowLeaderBoardButton, mAddPoint;
+    private Button mShowLeaderBoardButton;
     private boolean mAutoStartSignInFlow;
 
+//please note that some of the methods used here is following googles guidelines for setting up google games
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,14 +40,12 @@ public class LeaderboardActivity extends AppCompatActivity implements GoogleApiC
         // Get references to views
         mSignInButton = (SignInButton) findViewById(R.id.sign_in_button);
         mShowLeaderBoardButton = (Button) findViewById(R.id.show_leaderboard_button);
-        mAddPoint = (Button) findViewById(R.id.add_point);
 
         //Set those views to onclick listener
         mSignInButton.setOnClickListener(this);
         mShowLeaderBoardButton.setOnClickListener(this);
-        mAddPoint.setOnClickListener(this);
 
-
+        //look for api connection if none then create
         if (mGoogleApiClient == null) {
             mGoogleApiClient = new GoogleApiClient.Builder(this)
                     .addConnectionCallbacks(this)
@@ -54,8 +53,6 @@ public class LeaderboardActivity extends AppCompatActivity implements GoogleApiC
                     .addApi(Games.API)
                     .addScope(Games.SCOPE_GAMES)
                     .build();
-
-
         }
 
     }
@@ -70,36 +67,12 @@ public class LeaderboardActivity extends AppCompatActivity implements GoogleApiC
             case R.id.show_leaderboard_button:
                 showLeaderBoardClicked();
                 break;
-            case R.id.add_point:
-                addPoint();
-                break;
-
         }
     }
-
-    private void addPoint(){
-
-
-        if (mGoogleApiClient != null && mGoogleApiClient.isConnected()) {
-            // Call a Play Games services API method, for example:
-
-            Games.Leaderboards.submitScore(mGoogleApiClient, LEADERBOARD_ID, 1);
-        } else {
-
-            // Alternative implementation (or warn user that they must
-            // sign in to use this feature)
-
-
-            Toast.makeText(this, "You must sign in to use this feature!", Toast.LENGTH_SHORT).show();
-        }
-
-    }
-
 
 
     @Override
     public void onConnected(@Nullable Bundle bundle) {
-
 
     }
 
@@ -162,20 +135,21 @@ public class LeaderboardActivity extends AppCompatActivity implements GoogleApiC
     }
 
     private void signInClicked() {
+        //click sign in for google services
         mSignInClicked = true;
         mGoogleApiClient.connect();
         Toast.makeText(this, "You have signed in!", Toast.LENGTH_SHORT).show();
     }
 
 
-    //this is what actually shows the leaderboard
-    private void showLeaderBoardClicked(){
+    private void showLeaderBoardClicked() {
 
         if (mGoogleApiClient != null && mGoogleApiClient.isConnected()) {
-            //add scores
-            Games.Leaderboards.submitScore(mGoogleApiClient, LEADERBOARD_ID, 2);
-           startActivityForResult(Games.Leaderboards.getLeaderboardIntent(mGoogleApiClient,
-                   LEADERBOARD_ID), REQUEST_LEADERBOARD);
+            //add scores based on unique pokemon caught
+            Games.Leaderboards.submitScore(mGoogleApiClient, LEADERBOARD_ID, 3);
+            //this is what actually shows the leaderboard
+            startActivityForResult(Games.Leaderboards.getLeaderboardIntent(mGoogleApiClient,
+                    LEADERBOARD_ID), REQUEST_LEADERBOARD);
         } else {
 
             // Alternative implementation (or warn user that they must

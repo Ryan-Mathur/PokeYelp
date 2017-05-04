@@ -59,7 +59,6 @@ public class BaseGameUtils {
                 dialog.show();
             } else {
                 // no built-in dialog: show the fallback error message
-                //TODO had to change to wrap strin value of may need to look into
                 showAlert(activity, String.valueOf(fallbackErrorMessage));
             }
             return false;
