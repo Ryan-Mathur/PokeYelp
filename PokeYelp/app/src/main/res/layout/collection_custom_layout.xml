@@ -1,28 +1,28 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              android:orientation="vertical"
               android:id="@+id/collection_rootview"
-              android:layout_width="wrap_content"
+              android:layout_width="match_parent"
               android:layout_height="wrap_content"
-    android:padding="12dp">
+              android:orientation="vertical"
+              android:padding="12dp">
+
 
     <ImageView
         android:id="@+id/collection_pokemon_image"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
-        android:background="#a42a2a"/>
-
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:adjustViewBounds="true"
+        android:scaleType="fitXY"/>
 
     <TextView
         android:id="@+id/collection_pokemonName_textview"
-        android:text="TEST"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"/>
+        android:layout_height="wrap_content"
+        android:background="@drawable/box_machine"
+        android:padding="10dp"
+        android:text="Name"
+        android:textColor="#fff"
+        android:textSize="15sp"/>
 
-    <TextView
-        android:id="@+id/collection_company_textview"
-        android:text="TEST"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"/>
 
 </LinearLayout>

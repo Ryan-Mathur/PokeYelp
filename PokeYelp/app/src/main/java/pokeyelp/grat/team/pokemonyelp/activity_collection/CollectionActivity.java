@@ -27,6 +27,7 @@ public class CollectionActivity extends AppCompatActivity {
         mHelper = PokemonBusinessSQLiteOpenHelper.getInstance(this);
 
         RecyclerView recyclerView = (RecyclerView) findViewById(R.id.collection_recyclerview);
+
         GridLayoutManager gridLayoutManager = new GridLayoutManager(this, 3);
         recyclerView.setLayoutManager(gridLayoutManager);
         collections = mHelper.getYourCollection();
