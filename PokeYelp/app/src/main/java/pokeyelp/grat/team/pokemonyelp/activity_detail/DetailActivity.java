@@ -260,7 +260,7 @@ public class DetailActivity extends AppCompatActivity implements GoogleApiClient
         else{
             Intent catchIntent = new Intent(DetailActivity.this, CaptureActivity.class);
             catchIntent.putExtra(IntentCode.POKEMON_NAME_TO_CATCH, mCurrentPokemon.getName());
-            catchIntent.putExtra(IntentCode.POKEMON_NUMBER_TO_CATCH, (int) (mCurrentPokemon.getPokedexNumbers().get(0).getEntryNumber()));
+            catchIntent.putExtra(IntentCode.POKEMON_NUMBER_TO_CATCH, mCurrentPokemon.getId());
             catchIntent.putExtra(IntentCode.YELP_ID_TO_CATCH, mBusinessDetail.getId());
             startActivity(catchIntent);
         }

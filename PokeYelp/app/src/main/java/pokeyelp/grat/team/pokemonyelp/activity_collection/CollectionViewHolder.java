@@ -14,16 +14,15 @@ import pokeyelp.grat.team.pokemonyelp.R;
 public class CollectionViewHolder extends RecyclerView.ViewHolder {
 
     public ImageView mCollectionImageView;
-    public TextView mCollectionTextView, mCollectionPokemonName;
+    public TextView mCollectionPokemonName;
     View mRootView;
 
 
     public CollectionViewHolder(View itemView) {
         super(itemView);
-        mRootView = itemView.findViewById(R.id.collection_rootview);
+        mRootView = itemView;
         mCollectionImageView = (ImageView) itemView.findViewById(R.id.collection_pokemon_image);
         mCollectionPokemonName = (TextView) itemView.findViewById(R.id.collection_pokemonName_textview);
-        mCollectionTextView = (TextView) itemView.findViewById(R.id.collection_company_textview);
 
     }
 }

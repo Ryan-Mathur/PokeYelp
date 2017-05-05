@@ -21,20 +21,22 @@ public class CollectionActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_collection);
+        int numOfGrids = 2;
+        if (findViewById(R.id.horizontal_layout) != null){
+            numOfGrids = 4;
+        }
 
         ToolBar.setupSimpleToolbar(findViewById(android.R.id.content));
 
         mHelper = PokemonBusinessSQLiteOpenHelper.getInstance(this);
 
         RecyclerView recyclerView = (RecyclerView) findViewById(R.id.collection_recyclerview);
-        GridLayoutManager gridLayoutManager = new GridLayoutManager(this, 3);
+
+        GridLayoutManager gridLayoutManager = new GridLayoutManager(this, numOfGrids);
         recyclerView.setLayoutManager(gridLayoutManager);
         collections = mHelper.getYourCollection();
-        //System.out.println("in collection there are " + collections.size());
         mAdapter = new CollectionRecyclerViewAdapater(collections);
         recyclerView.setAdapter(mAdapter);
-
-        //mHelper.getYourCollection();
 
 
         /*------- TEST --------- CODE ------------------------
@@ -42,32 +44,9 @@ public class CollectionActivity extends AppCompatActivity {
         mHelper.addToCollection("charmander", 2,  "starbucks");
         mHelper.addToCollection("electrode", 3, "maison_kayser");
         mHelper.addToCollection("lapras", 4, "trader_joes");
-
-        List<Collection> collectionsList = mHelper.getYourCollection();
-
-        System.out.println(collectionsList.get(0).getPokemonName());
-        System.out.println(collectionsList.get(1).getPokemonName());
-
-        mHelper = PokemonBusinessSQLiteOpenHelper.getInstance(this);
-        mHelper.resetStores();
-        mHelper.insertPokemonStore("some_id", "mewtwo");
-        System.out.println(mHelper.searchForPokemon("some_id"));
-
-        mHelper.updatePokemon("some_id", null);
-        System.out.println(mHelper.searchForPokemon("some_id"));
-        mHelper.addToCollection("charmander", "randomStore");
-        mHelper.addToCollection("pikachu", "GAnyu");
-
-        List<Collection> collectionsList = mHelper.getYourCollection();
-        System.out.println(collectionsList.get(0).getPokemonName());
-        System.out.println(collectionsList.get(1).getPokemonName());*/
+        */
 
 
     }
-
-
-
-
-
 
 }

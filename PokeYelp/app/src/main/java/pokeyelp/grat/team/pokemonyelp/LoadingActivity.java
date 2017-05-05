@@ -125,7 +125,7 @@ public class LoadingActivity extends AppCompatActivity {
 
             } else {
                 //if something went wrong, let's insult the user some more!
-                Toast.makeText(LoadingActivity.this, "Something went wrong, what did you DO?!?!", Toast.LENGTH_SHORT).show();
+                Toast.makeText(LoadingActivity.this, "Something went wrong, please turn it off and on again.", Toast.LENGTH_SHORT).show();
             }
         }
     }

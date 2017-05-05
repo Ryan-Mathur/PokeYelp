@@ -36,9 +36,8 @@ public class CollectionRecyclerViewAdapater extends RecyclerView.Adapter<Collect
         String imageUrl = Pokemon.POKEMON_SPRITE_BASE_URL + currentCollection.getPokemonName() + ".gif";
         Picasso.with(holder.mCollectionImageView.getContext()).load(imageUrl).into(holder.mCollectionImageView);
 
-        holder.mCollectionPokemonName.setText(currentCollection.getPokemonName());
-
-//        holder.mCollectionTextView.setText(currentCollection.getYelpStore());
+        String displayName = currentCollection.getId() + ": " + currentCollection.getPokemonName().substring(0, 1).toUpperCase() + currentCollection.getPokemonName().substring(1);
+        holder.mCollectionPokemonName.setText(displayName);
     }
 
     @Override
