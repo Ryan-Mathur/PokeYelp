@@ -5,9 +5,10 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/machine_vertical"
+    android:background="@drawable/machine_horizontal"
     android:padding="20dp"
     tools:context="pokeyelp.grat.team.pokemonyelp.activity_capture.CaptureActivity">
+
 
     <ImageView
         android:id="@+id/capture_pokemon"
@@ -29,7 +30,7 @@
 
     <TextView
         android:id="@+id/capture_button"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom"
         android:background="@drawable/box_machine"
@@ -39,7 +40,5 @@
         android:text="@string/capture_button"
         android:textColor="#fff"
         android:textSize="20sp"/>
-
-
 
 </FrameLayout>
