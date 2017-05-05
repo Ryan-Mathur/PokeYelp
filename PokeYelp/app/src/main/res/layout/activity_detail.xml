@@ -10,6 +10,24 @@
 
     <include layout="@layout/toolbar_layout"/>
 
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="500dp">
+
+            <ImageView
+                android:id="@+id/detail_image_view"
+                android:layout_width="match_parent"
+                android:layout_height="200dp"/>
+
+        </FrameLayout>
+
+
+    </ScrollView>
+
     <TextView
         android:id="@+id/detail_name"
         android:layout_width="wrap_content"
