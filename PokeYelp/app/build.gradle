@@ -38,5 +38,5 @@ dependencies {
     compile 'com.squareup.picasso:picasso:2.5.2'
     compile 'com.koushikdutta.ion:ion:2.1.9'
     compile project(path: ':BaseGameUtils')
-    compile 'com.google.android.gms:play-services-auth:10.2.4'
 }
+apply plugin: 'com.google.gms.google-services'
