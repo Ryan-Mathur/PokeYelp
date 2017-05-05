@@ -7,6 +7,8 @@ import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
@@ -44,6 +46,7 @@ public class LeaderboardActivity extends AppCompatActivity implements GoogleApiC
         // Get references to views
         mSignInButton = (SignInButton) findViewById(R.id.sign_in_button);
         mShowLeaderBoardButton = (Button) findViewById(R.id.show_leaderboard_button);
+
 
 
         //reference to view for toolbar
