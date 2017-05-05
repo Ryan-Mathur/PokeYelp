@@ -36,7 +36,8 @@ public class MyJobService extends JobService {
         mBuilder.setAutoCancel(true);
         mBuilder.setContentIntent(pIntent);
         mBuilder.setPriority(Notification.PRIORITY_DEFAULT);
-        mBuilder.setContentText("Hi, The Pokemons are here again, time to catch!");
+        mBuilder.setContentTitle("Pokemon sighted!");
+        mBuilder.setContentText("New pokemon have appeared!");
 
         SharedPreferences sp =getSharedPreferences(HomeActivity.SHAREPREFERENCE_KEY,MODE_PRIVATE);
         boolean isScheduled=sp.getBoolean(HomeActivity.SCHEDULE_KEY,false);
@@ -53,8 +54,6 @@ public class MyJobService extends JobService {
             sp.edit().putBoolean(HomeActivity.SCHEDULE_KEY,true).commit();
 
         }
-
-
 
         return true;
     }
