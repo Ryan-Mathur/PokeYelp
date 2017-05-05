@@ -1,63 +1,54 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="horizontal" android:layout_width="match_parent"
-    android:layout_height="60dp"
-    android:elevation="4dp"
-    android:background="#a61907">
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:layout_width="match_parent"
+                android:layout_height="?attr/actionBarSize"
+                android:background="#a61907"
+                android:elevation="4dp">
 
     <TextView
         android:id="@+id/goto_home_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_alignParentLeft="true"
+        android:layout_marginLeft="10dp"
         android:text="Pokemon Yelp"
         android:textColor="#fff"
         android:textSize="20dp"
-        android:layout_gravity="center"
-        android:layout_marginLeft="10dp"/>
+        android:textStyle="bold"/>
 
 
-<RelativeLayout
-    android:layout_width="wrap_content"
-    android:layout_height="match_parent">
-
-    <ImageView
-        android:id="@+id/goto_leaderboard_button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:background="@android:drawable/ic_menu_share"
-        android:layout_marginRight="20dp"
+    <LinearLayout
         android:layout_alignParentRight="true"
-        android:layout_centerVertical="true"
-        />
-
-
-    <ImageView
-        android:id="@+id/goto_collection_button"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:background="@android:drawable/ic_dialog_info"
-        android:layout_marginRight="20dp"
-        android:layout_centerVertical="true"
-        android:layout_toLeftOf="@id/goto_leaderboard_button"
-        />
+        android:layout_height="match_parent"
+        android:gravity="center_vertical">
 
-    <ImageView
-        android:id="@+id/go_to_search_button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:background="@android:drawable/ic_menu_search"
-        android:layout_marginRight="20dp"
-        android:layout_centerVertical="true"
-        android:layout_toLeftOf="@id/goto_collection_button"
-        />
+        <ImageView
+            android:id="@+id/go_to_search_button"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_marginRight="10dp"
+            android:background="@android:drawable/ic_menu_search"
+            />
 
+        <ImageView
+            android:id="@+id/goto_collection_button"
+            android:layout_width="25dp"
+            android:layout_height="25dp"
+            android:layout_marginRight="15dp"
+            android:background="@drawable/pokeball_icon"
+            />
 
-    
+        <ImageView
+            android:id="@+id/goto_leaderboard_button"
+            android:layout_width="25dp"
+            android:layout_height="25dp"
+            android:layout_marginRight="10dp"
+            android:background="@drawable/trophy"
+            />
 
-
+    </LinearLayout>
 
 
 </RelativeLayout>
-
-
-</LinearLayout>

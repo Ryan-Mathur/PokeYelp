@@ -8,6 +8,8 @@
     android:orientation="vertical"
     tools:context="pokeyelp.grat.team.pokemonyelp.activity_detail.DetailActivity">
 
+    <include layout="@layout/toolbar_layout"/>
+
     <TextView
         android:id="@+id/detail_name"
         android:layout_width="wrap_content"

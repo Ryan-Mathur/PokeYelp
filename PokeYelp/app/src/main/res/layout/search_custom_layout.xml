@@ -1,47 +1,69 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:padding="10dp"
-    android:id="@+id/root_view_for_search_list">
+             android:id="@+id/root_view_for_search_list"
+             android:layout_width="match_parent"
+             android:layout_height="wrap_content">
 
     <LinearLayout
+        android:layout_margin="10dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:orientation="horizontal">
 
         <ImageView
             android:id="@+id/search_imageview"
-            android:layout_width="75dp"
-            android:layout_height="75dp"
-            android:background="#932222"/>
-
-        <TextView
-            android:id="@+id/search_business_name"
-            android:layout_width="wrap_content"
+            android:layout_width="70dp"
             android:layout_height="wrap_content"
-            android:text="TEST" />
-
-        <TextView
-            android:id="@+id/search_address"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="TEST" />
+            android:adjustViewBounds="true"
+            android:scaleType="centerCrop"/>
 
         <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content">
-            <ImageView
-                android:id="@+id/search_fivestars"
-                android:layout_width="100dp"
-                android:layout_height="25dp"
-                android:background="#2c5c6b"/>
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:orientation="vertical">
+
             <TextView
-                android:id="@+id/search_numbofreviews"
+                android:id="@+id/search_business_name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="TEST" />
+                android:text="Title"
+                android:textSize="18sp"
+                android:textColor="@color/title"
+                android:textStyle="bold"/>
 
+
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center">
+
+                <ImageView
+                    android:id="@+id/search_fivestars"
+                    android:layout_width="100dp"
+                    android:layout_height="25dp"/>
+
+                <TextView
+                    android:id="@+id/search_numbofreviews"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="5dp"
+                    android:text="Reviews"
+                    android:textColor="@color/title"/>
+
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/search_address"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Address"/>
+            <TextView
+                android:id="@+id/search_category"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Category"/>
         </LinearLayout>
 
 
@@ -49,10 +71,16 @@
 
     <ImageView
         android:id="@+id/search_yelplogo"
-        android:layout_gravity="bottom|right"
-        android:layout_width="75dp"
-        android:layout_height="75dp"
-        android:background="#2b0a56"/>
+        android:layout_width="50dp"
+        android:layout_height="25dp"
+        android:layout_marginBottom="5dp"
+        android:layout_gravity="bottom|right"/>
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/lightGray"
+        android:layout_gravity="bottom"/>
 
 
 </FrameLayout>

@@ -14,6 +14,7 @@ import pokeyelp.grat.team.pokemonyelp.R;
 import pokeyelp.grat.team.pokemonyelp.activity_detail.DetailActivity;
 import pokeyelp.grat.team.pokemonyelp.constants.IntentCode;
 import pokeyelp.grat.team.pokemonyelp.gson_yelp.Business;
+import pokeyelp.grat.team.pokemonyelp.helpers.ViewHelper;
 
 /**
  * Created by Galen on 5/1/17.
@@ -39,10 +40,9 @@ public class SearchViewAdapter extends RecyclerView.Adapter<SearchViewHolder> {
         final Business currentBusiness = mBusinesses.get(position);
 
         holder.mCompanyName.setText(currentBusiness.getName());
-        holder.mAddress.setText(currentBusiness.getLocation().getAddress1());
-        holder.mReview.setText(String.valueOf(currentBusiness.getReviewCount()));
-
-
+        holder.mAddress.setText(currentBusiness.getLocation().getAddress1() + ", " +
+        currentBusiness.getLocation().getCity());
+        holder.mReview.setText(currentBusiness.getReviewCount()+ " Reviews");
 
         if (!currentBusiness.getImageUrl().isEmpty()) {
             Picasso.with(holder.mBusinessPhoto.getContext()).load(currentBusiness.getImageUrl())
@@ -52,8 +52,9 @@ public class SearchViewAdapter extends RecyclerView.Adapter<SearchViewHolder> {
         }
 
         //these are placeholders for now
-        holder.mRatingView.setImageResource(R.drawable.stars_extra_large_5);
         holder.mYelpLogo.setImageResource(R.drawable.yelp_trademark_rgb_outline);
+        ViewHelper.setStars(currentBusiness.getRating(), holder.mRatingView);
+        holder.mCategory.setText(currentBusiness.getCategories().get(0).getTitle());
 
         holder.mRootView.setOnClickListener(new View.OnClickListener() {
             @Override

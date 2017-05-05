@@ -1,90 +1,109 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical"
-    tools:context="pokeyelp.grat.team.pokemonyelp.activity_search.SearchActivity">
+              xmlns:app="http://schemas.android.com/apk/res-auto"
+              xmlns:tools="http://schemas.android.com/tools"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:orientation="vertical"
+              tools:context="pokeyelp.grat.team.pokemonyelp.activity_search.SearchActivity">
 
 
-    <include layout="@layout/toolbar_layout" />
+    <include layout="@layout/toolbar_layout"/>
 
 
-    <ScrollView
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
 
 
-        <RelativeLayout
+        <LinearLayout
+            android:id="@+id/search_linerlayout_view"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
-
             <LinearLayout
-                android:id="@+id/search_linerlayout_view"
                 android:layout_width="wrap_content"
-                android:layout_height="85dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="8"
+                android:gravity="center_vertical"
                 android:orientation="vertical">
 
-                <RelativeLayout
+
+                <EditText
+                    android:id="@+id/search_by_name"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="10dp"
+                    android:layout_marginTop="10dp"
+                    android:background="@android:color/transparent"
+                    android:hint="e.g. restaurants, food"
+                    android:inputType="text"
+                    android:paddingLeft="5dp"/>
+
+                <ImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="#bcbcbc"/>
+
+                <EditText
+                    android:id="@+id/search_by_location"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="10dp"
+                    android:layout_marginTop="10dp"
+                    android:background="@android:color/transparent"
+                    android:hint="Current Location"
+                    android:inputType="text"
+                    android:paddingLeft="5dp"
+                    android:textColorHint="#3f98f1"/>
+
+            </LinearLayout>
+
+            <ImageView
+                android:layout_width="1dp"
+                android:layout_height="match_parent"
+                android:background="#bcbcbc"/>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_weight="2"
+                android:gravity="center"
+                android:orientation="vertical">
+
+                <ImageView
+                    android:id="@+id/the_search_button"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content">
+                    android:layout_height="wrap_content"
+                    android:src="@android:drawable/ic_search_category_default"/>
 
 
-                    <EditText
-                        android:id="@+id/search_by_name"
-                        android:layout_width="300dp"
-                        android:layout_height="45dp"
-                        android:hint="e.g. restaurants, food"
-                        android:inputType="text" />
-
-                    <EditText
-                        android:id="@+id/search_by_location"
-                        android:layout_width="300dp"
-                        android:layout_height="40dp"
-                        android:layout_below="@id/search_by_name"
-                        android:hint="Current Location"
-                        android:inputType="text"
-                        android:textColorHint="#3f98f1" />
-
-                    <Button
-                        android:id="@+id/filter"
-                        android:layout_width="35dp"
-                        android:layout_height="35dp"
-                        android:layout_alignParentRight="true"
-                        android:layout_centerVertical="true"
-                        android:layout_margin="5dp"
-                        android:background="@drawable/ic_action_filter"
-                        android:visibility="invisible" />
-
-
-                    <Button
-                        android:id="@+id/the_search_button"
-                        android:layout_width="35dp"
-                        android:layout_height="35dp"
-                        android:layout_centerVertical="true"
-                        android:layout_toLeftOf="@id/filter"
-                        android:background="@drawable/search_ic1" />
-
-                </RelativeLayout>
-
+                <TextView
+                    android:id="@+id/filter"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="5dp"
+                    android:text="Sort by"
+                    android:visibility="gone"/>
 
             </LinearLayout>
 
 
-            <android.support.v7.widget.RecyclerView
-                android:id="@+id/search_result_recyvler_View"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:nestedScrollingEnabled="false"
-                android:layout_below="@id/search_linerlayout_view">
+        </LinearLayout>
 
-            </android.support.v7.widget.RecyclerView>
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="#bcbcbc"/>
 
 
-        </RelativeLayout>
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/search_result_recycler_view"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"/>
 
-    </ScrollView>
+
+    </LinearLayout>
 
 </LinearLayout>
