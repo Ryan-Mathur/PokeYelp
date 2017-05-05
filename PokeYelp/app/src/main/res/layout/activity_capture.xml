@@ -12,8 +12,7 @@
     <ImageView
         android:id="@+id/capture_pokemon"
         android:layout_width="100dp"
-        android:layout_height="100dp"
-        android:background="#1788a7"/>
+        android:layout_height="100dp"/>
 
     <Button
         android:id="@+id/capture_button"

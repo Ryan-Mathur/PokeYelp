@@ -6,4 +6,6 @@
     <color name="title">#000000</color>
     <color name="sub">#7b7b7b</color>
     <color name="lightGray">#bcbcbc</color>
+    <color name="machineBlue">#007fb6</color>
+    <color name="machineBlueFade">#80007fb6</color>
 </resources>
