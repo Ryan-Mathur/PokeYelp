@@ -31,11 +31,12 @@ import pokeyelp.grat.team.pokemonyelp.R;
 import pokeyelp.grat.team.pokemonyelp.activity_capture.CaptureActivity;
 import pokeyelp.grat.team.pokemonyelp.activity_collection.PokemonBusinessSQLiteOpenHelper;
 import pokeyelp.grat.team.pokemonyelp.constants.Api;
-import pokeyelp.grat.team.pokemonyelp.constants.Game;
+import pokeyelp.grat.team.pokemonyelp.constants.GameSettings;
 import pokeyelp.grat.team.pokemonyelp.constants.IntentCode;
 import pokeyelp.grat.team.pokemonyelp.constants.Pokemon;
 import pokeyelp.grat.team.pokemonyelp.gson_pokemon_species.Species;
 import pokeyelp.grat.team.pokemonyelp.gson_yelp.BusinessDetail;
+import pokeyelp.grat.team.pokemonyelp.helpers.ToolBar;
 import pokeyelp.grat.team.pokemonyelp.singleton.MrSingleton;
 
 public class DetailActivity extends AppCompatActivity implements GoogleApiClient.ConnectionCallbacks,
@@ -58,6 +59,8 @@ public class DetailActivity extends AppCompatActivity implements GoogleApiClient
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detail);
+
+        ToolBar.setupSimpleToolbar(findViewById(android.R.id.content));
 
         singleton = MrSingleton.getInstance();
 
@@ -190,7 +193,7 @@ public class DetailActivity extends AppCompatActivity implements GoogleApiClient
         pokemonLocation.setLatitude(mBusinessDetail.getCoordinates().getLatitude());
         pokemonLocation.setLongitude(mBusinessDetail.getCoordinates().getLongitude());
         double distance = mLocation.distanceTo(pokemonLocation);
-        if (distance > Game.MIN_CAPTURE_DISTANCE){
+        if (distance > GameSettings.MIN_CAPTURE_DISTANCE){
             Toast.makeText(this, "You are too far away! " +distance, Toast.LENGTH_SHORT).show();
         }
         else{

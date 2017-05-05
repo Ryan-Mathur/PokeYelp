@@ -16,8 +16,9 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
-import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
@@ -48,7 +49,7 @@ public class SearchActivity extends AppCompatActivity implements GoogleApiClient
     private GoogleApiClient mGoogleApiClient;
     private String mLong, mLat;
     private String mYelpToken;
-    private Button mFilterButton;
+    private TextView mFilterButton;
     private String mSortBy;
     private String mLocation, mCategories;
     private GetYelpBusinesses mGetYelp;
@@ -71,7 +72,7 @@ public class SearchActivity extends AppCompatActivity implements GoogleApiClient
         mLocationInput = (EditText) findViewById(R.id.search_by_location);
 
         //setting up the recycler view
-        RecyclerView recyclerView = (RecyclerView) findViewById(R.id.search_result_recyvler_View);
+        RecyclerView recyclerView = (RecyclerView) findViewById(R.id.search_result_recycler_view);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(SearchActivity.this, LinearLayoutManager.VERTICAL, false);
 
         //because we are running an asynctask in the background, we don't know WHEN we are going to get
@@ -90,8 +91,8 @@ public class SearchActivity extends AppCompatActivity implements GoogleApiClient
                     .build();
         }
 
-        Button search_button = (Button) findViewById(R.id.the_search_button);
-        mFilterButton = (Button) findViewById(R.id.filter);
+        ImageView search_button = (ImageView) findViewById(R.id.the_search_button);
+        mFilterButton = (TextView) findViewById(R.id.filter);
 
 
         // call a api from yelp when click on the search button
@@ -313,7 +314,7 @@ public class SearchActivity extends AppCompatActivity implements GoogleApiClient
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
 
         //Sort the results by one of the these modes: best_match, rating, review_count or distance. By default it's best_match.
-        String strArry[] = {"Rating", "Best_match", "Review_count", "Distance"};
+        String strArry[] = {"Rating", "Best Match", "Review Count", "Distance"};
 
         builder.setTitle("Sort By")
                 .setItems(strArry, new DialogInterface.OnClickListener() {
