@@ -21,6 +21,7 @@ import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.location.LocationServices;
 import com.google.gson.Gson;
 import com.koushikdutta.ion.Ion;
+import com.squareup.picasso.Picasso;
 
 import java.io.IOException;
 
@@ -36,7 +37,10 @@ import pokeyelp.grat.team.pokemonyelp.constants.IntentCode;
 import pokeyelp.grat.team.pokemonyelp.constants.Pokemon;
 import pokeyelp.grat.team.pokemonyelp.gson_pokemon_species.Species;
 import pokeyelp.grat.team.pokemonyelp.gson_yelp.BusinessDetail;
+import pokeyelp.grat.team.pokemonyelp.gson_yelp.Hour;
+import pokeyelp.grat.team.pokemonyelp.gson_yelp.Open;
 import pokeyelp.grat.team.pokemonyelp.helpers.ToolBar;
+import pokeyelp.grat.team.pokemonyelp.helpers.ViewHelper;
 import pokeyelp.grat.team.pokemonyelp.singleton.MrSingleton;
 
 public class DetailActivity extends AppCompatActivity implements GoogleApiClient.ConnectionCallbacks,
@@ -54,6 +58,11 @@ public class DetailActivity extends AppCompatActivity implements GoogleApiClient
     private GoogleApiClient mGoogleApiClient;
     private PokemonBusinessSQLiteOpenHelper mDbHelper;
     private MrSingleton singleton;
+    private TextView mPokemonScan;
+    private TextView mPokemonCatch;
+    private TextView mPokemonText;
+    private TextView mPokedexText;
+    private ImageView mPokemonSprite;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -67,6 +76,12 @@ public class DetailActivity extends AppCompatActivity implements GoogleApiClient
 
         mDbHelper = PokemonBusinessSQLiteOpenHelper.getInstance(this);
         mYelpToken = singleton.getToken();
+
+        mPokemonScan = (TextView) findViewById(R.id.detail_button_scan_pokemon);
+        mPokemonCatch = (TextView) findViewById(R.id.detail_button_catch_pokemon);
+        mPokemonText = (TextView) findViewById(R.id.detail_pokemon_name);
+        mPokedexText = (TextView) findViewById(R.id.detail_pokedex_message);
+        mPokemonSprite = (ImageView) findViewById(R.id.detail_pokemon_picture);
 
         getCurrentBusiness();
 
@@ -95,8 +110,8 @@ public class DetailActivity extends AppCompatActivity implements GoogleApiClient
     public void getCurrentPokemon(){
         mDBPokemon = mDbHelper.searchForPokemon(mYelpId);
         if (mDBPokemon==null){
-            findViewById(R.id.detail_button_scan_pokemon).setVisibility(View.VISIBLE);
-            findViewById(R.id.detail_button_scan_pokemon).setOnClickListener(new View.OnClickListener() {
+            mPokemonScan.setVisibility(View.VISIBLE);
+            mPokemonScan.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     if(mDBPokemon!=null){
@@ -104,9 +119,11 @@ public class DetailActivity extends AppCompatActivity implements GoogleApiClient
                         return;
                     }
                     if (mPokemonTask != null && mPokemonTask.getStatus().equals(AsyncTask.Status.RUNNING)){
-                        Toast.makeText(DetailActivity.this, "Already Scanning", Toast.LENGTH_SHORT).show();
+                        return;
                     } else {
-                        Toast.makeText(DetailActivity.this, "Scanning", Toast.LENGTH_SHORT).show();
+                        mPokemonScan.setVisibility(View.INVISIBLE);
+                        mPokedexText.setVisibility(View.VISIBLE);
+                        mPokedexText.setText("Scanning...");
                         mPokemonTask = new GetPokemon();
                         mPokemonTask.execute();
                     }
@@ -115,6 +132,9 @@ public class DetailActivity extends AppCompatActivity implements GoogleApiClient
         } else if (mDBPokemon.equals(Pokemon.POKEMON_NOT_AVAILABLE)){
             hidePokemon();
         } else {
+            mPokemonScan.setVisibility(View.INVISIBLE);
+            mPokedexText.setVisibility(View.VISIBLE);
+            mPokedexText.setText("Loading...");
             int indexForCurrent = singleton.indexOfSpeciesName(mDBPokemon);
             if (indexForCurrent!=-1){
                 System.out.println("Getting from cache");
@@ -134,22 +154,55 @@ public class DetailActivity extends AppCompatActivity implements GoogleApiClient
         for (int i = 0; i < business.getCategories().size(); i++) {
             categories += business.getCategories().get(i).getTitle() + " ";
         }
+        ImageView storePic = (ImageView) findViewById(R.id.detail_image_view);
+        if (!business.getImageUrl().trim().isEmpty()||business.getImageUrl() == null) {
+            Picasso.with(this).load(business.getImageUrl()).into(storePic);
+        } else {
+            storePic.setImageResource(R.drawable.box);
+        }
         ((TextView) findViewById(R.id.detail_name)).setText(business.getName());
-        ((TextView) findViewById(R.id.detail_address)).setText(business.getLocation().getAddress1());
         ((TextView) findViewById(R.id.detail_categories)).setText(categories);
+        ImageView starsPic = (ImageView) findViewById(R.id.detail_star_rating);
+        ViewHelper.setStars(business.getRating(), starsPic);
+        ((TextView) findViewById(R.id.detail_number_reviews)).setText(String.valueOf(business.getReviewCount()));
+        String address= ViewHelper.getAddress(business.getLocation());
+        if (address.equals(Api.YELP_NO_ADDRESS)){
+            address = "";
+        } else {
+            address += ", ";
+        }
+        ((TextView) findViewById(R.id.detail_address)).setText(address + business.getLocation().getCity());
+        String startHour;
+        String endHour = " ";
+        try {
+            Open open = business.getHours().get(0).getOpen().get(0);
+            startHour = open.getStart();
+            endHour = open.getEnd();
+        } catch (NullPointerException e){
+            startHour = null;
+        }
+        if (startHour == null){
+            ((TextView) findViewById(R.id.detail_hours)).setText("Hours not available.");
+        } else {
+            ((TextView) findViewById(R.id.detail_hours)).setText(startHour + " - " + endHour);
+        }
+
+
+        ((TextView) findViewById(R.id.detail_phone)).setText(business.getPhone());
 
     }
 
     public void showPokemon(){
         String pokemonName = mCurrentPokemon.getName();
-        Toast.makeText(DetailActivity.this, pokemonName, Toast.LENGTH_SHORT).show();
-        ImageView pokemonSprite = (ImageView) findViewById(R.id.detail_pokemon_picture);
-        pokemonSprite.setVisibility(View.VISIBLE);
-        TextView catchButton = (TextView) findViewById(R.id.detail_button_catch_pokemon);
-        catchButton.setVisibility(View.VISIBLE);
+        String output = pokemonName.substring(0, 1).toUpperCase() + pokemonName.substring(1);
+        mPokedexText.setVisibility(View.INVISIBLE);
+        mPokemonText.setText(output);
+        mPokemonText.setVisibility(View.VISIBLE);
+        mPokemonSprite.setVisibility(View.VISIBLE);
+        mPokemonCatch.setVisibility(View.VISIBLE);
         String imageUrl = Pokemon.POKEMON_SPRITE_BASE_URL + pokemonName +".gif";
-        Ion.with(DetailActivity.this).load(imageUrl).intoImageView(pokemonSprite);
-        catchButton.setOnClickListener(new View.OnClickListener() {
+        Ion.with(DetailActivity.this).load(imageUrl).intoImageView(mPokemonSprite);
+        mPokemonCatch.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if(mGoogleApiClient.isConnected()){
@@ -162,9 +215,12 @@ public class DetailActivity extends AppCompatActivity implements GoogleApiClient
     }
 
     public void hidePokemon(){
-        findViewById(R.id.detail_pokemon_picture).setVisibility(View.INVISIBLE);
-        findViewById(R.id.detail_button_catch_pokemon).setVisibility(View.INVISIBLE);
-        findViewById(R.id.detail_button_scan_pokemon).setVisibility(View.INVISIBLE);
+        mPokedexText.setVisibility(View.VISIBLE);
+        mPokedexText.setText("No Pokemon Found.");
+        mPokemonText.setVisibility(View.INVISIBLE);
+        mPokemonSprite.setVisibility(View.INVISIBLE);
+        mPokemonCatch.setVisibility(View.INVISIBLE);
+        mPokemonScan.setVisibility(View.INVISIBLE);
 
     }
 
@@ -190,11 +246,16 @@ public class DetailActivity extends AppCompatActivity implements GoogleApiClient
 
     public void catchPokemon(){
         Location pokemonLocation = new Location("");
-        pokemonLocation.setLatitude(mBusinessDetail.getCoordinates().getLatitude());
-        pokemonLocation.setLongitude(mBusinessDetail.getCoordinates().getLongitude());
-        double distance = mLocation.distanceTo(pokemonLocation);
+        double distance = GameSettings.MIN_CAPTURE_DISTANCE + 1;
+        try {
+            pokemonLocation.setLatitude(mBusinessDetail.getCoordinates().getLatitude());
+            pokemonLocation.setLongitude(mBusinessDetail.getCoordinates().getLongitude());
+            distance = mLocation.distanceTo(pokemonLocation);
+        } catch (NullPointerException e){
+            e.printStackTrace();
+        }
         if (distance > GameSettings.MIN_CAPTURE_DISTANCE){
-            Toast.makeText(this, "You are too far away! " +distance, Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "You are too far away!", Toast.LENGTH_SHORT).show();
         }
         else{
             Intent catchIntent = new Intent(DetailActivity.this, CaptureActivity.class);
@@ -336,8 +397,9 @@ public class DetailActivity extends AppCompatActivity implements GoogleApiClient
                 e.printStackTrace();
             } catch (NullPointerException e){
                 e.printStackTrace();
+            } catch (IllegalStateException e){
+                e.printStackTrace();
             }
-
             return null;
         }
 

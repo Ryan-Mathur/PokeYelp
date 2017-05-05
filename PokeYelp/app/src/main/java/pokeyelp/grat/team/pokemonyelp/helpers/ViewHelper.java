@@ -2,7 +2,13 @@ package pokeyelp.grat.team.pokemonyelp.helpers;
 
 import android.widget.ImageView;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import pokeyelp.grat.team.pokemonyelp.R;
+import pokeyelp.grat.team.pokemonyelp.constants.Api;
+import pokeyelp.grat.team.pokemonyelp.gson_yelp.BusinessDetail;
+import pokeyelp.grat.team.pokemonyelp.gson_yelp.Location;
 
 /**
  * Created by twang on 5/4/17.
@@ -33,5 +39,19 @@ public class ViewHelper {
             starView.setImageResource(R.drawable.stars_extra_large_5);
         }
 
+    }
+
+    public static String getAddress(Location location){
+        String address = location.getAddress1();
+        if (address == null || address.isEmpty() || address.equals("")){
+            address = location.getAddress2();
+        }
+        if (address == null || address.isEmpty() || address.equals("")){
+            address = location.getAddress3();
+        }
+        if (address == null || address.isEmpty() || address.equals("")){
+            address = Api.YELP_NO_ADDRESS;
+        }
+        return address;
     }
 }

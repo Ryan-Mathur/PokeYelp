@@ -12,6 +12,7 @@ import java.util.List;
 
 import pokeyelp.grat.team.pokemonyelp.R;
 import pokeyelp.grat.team.pokemonyelp.activity_detail.DetailActivity;
+import pokeyelp.grat.team.pokemonyelp.constants.Api;
 import pokeyelp.grat.team.pokemonyelp.constants.IntentCode;
 import pokeyelp.grat.team.pokemonyelp.gson_yelp.Business;
 import pokeyelp.grat.team.pokemonyelp.helpers.ViewHelper;
@@ -40,8 +41,13 @@ public class SearchViewAdapter extends RecyclerView.Adapter<SearchViewHolder> {
         final Business currentBusiness = mBusinesses.get(position);
 
         holder.mCompanyName.setText(currentBusiness.getName());
-        holder.mAddress.setText(currentBusiness.getLocation().getAddress1() + ", " +
-        currentBusiness.getLocation().getCity());
+        String address= ViewHelper.getAddress(currentBusiness.getLocation());
+        if (address.equals(Api.YELP_NO_ADDRESS)){
+            address = "";
+        } else {
+            address += ", ";
+        }
+        holder.mAddress.setText(address + currentBusiness.getLocation().getCity());
         holder.mReview.setText(currentBusiness.getReviewCount()+ " Reviews");
 
         if (!currentBusiness.getImageUrl().isEmpty()) {
