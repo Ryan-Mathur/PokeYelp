@@ -40,4 +40,3 @@ dependencies {
     compile project(path: ':BaseGameUtils')
     compile 'com.google.android.gms:play-services-auth:10.2.4'
 }
-apply plugin: 'com.google.gms.google-services'
