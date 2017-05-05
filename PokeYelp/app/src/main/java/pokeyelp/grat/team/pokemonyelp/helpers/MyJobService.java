@@ -10,6 +10,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.support.v7.app.NotificationCompat;
 
+import pokeyelp.grat.team.pokemonyelp.R;
 import pokeyelp.grat.team.pokemonyelp.activity_collection.PokemonBusinessSQLiteOpenHelper;
 import pokeyelp.grat.team.pokemonyelp.activity_home.HomeActivity;
 
@@ -31,7 +32,7 @@ public class MyJobService extends JobService {
 
 
         NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(this);
-        mBuilder.setSmallIcon(android.R.drawable.ic_dialog_alert);
+        mBuilder.setSmallIcon(R.drawable.pokeball_icon);
         mBuilder.setAutoCancel(true);
         mBuilder.setContentIntent(pIntent);
         mBuilder.setPriority(Notification.PRIORITY_DEFAULT);

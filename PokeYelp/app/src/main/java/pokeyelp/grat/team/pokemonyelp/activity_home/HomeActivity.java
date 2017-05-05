@@ -13,6 +13,7 @@ import android.widget.Button;
 import pokeyelp.grat.team.pokemonyelp.R;
 import pokeyelp.grat.team.pokemonyelp.activity_collection.CollectionActivity;
 import pokeyelp.grat.team.pokemonyelp.activity_search.SearchActivity;
+import pokeyelp.grat.team.pokemonyelp.constants.GameSettings;
 import pokeyelp.grat.team.pokemonyelp.helpers.MyJobService;
 import pokeyelp.grat.team.pokemonyelp.helpers.ToolBar;
 
@@ -33,10 +34,9 @@ public class HomeActivity extends AppCompatActivity {
 
         ToolBar.setupSimpleToolbar(findViewById(android.R.id.content));
 
-
         JobScheduler jobScheduler = (JobScheduler) getSystemService(JOB_SCHEDULER_SERVICE);
 
-       int size = jobScheduler.getAllPendingJobs().size();
+        int size = jobScheduler.getAllPendingJobs().size();
 
         if(size==0) {
 
@@ -47,7 +47,7 @@ public class HomeActivity extends AppCompatActivity {
 
 
             JobInfo periodicJobInfo = new JobInfo.Builder(PERIODIC_JOB_ID, new ComponentName(this, MyJobService.class))
-                    .setPeriodic(120000)//this for test the jobservice and notification
+                    .setPeriodic(GameSettings.STORE_RESET_TIME)
                     .build();
 
 
@@ -65,15 +65,6 @@ public class HomeActivity extends AppCompatActivity {
                 v.getContext().startActivity(intent);
 
 
-            }
-        });
-
-        Button collectionButton = (Button) findViewById(R.id.tocollection_activity);
-        collectionButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(v.getContext(), CollectionActivity.class);
-                v.getContext().startActivity(intent);
             }
         });
     }

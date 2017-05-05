@@ -13,7 +13,7 @@ import pokeyelp.grat.team.pokemonyelp.R;
 
 public class SearchViewHolder extends RecyclerView.ViewHolder {
 
-    public TextView mCompanyName, mAddress, mReview;
+    public TextView mCompanyName, mAddress, mReview, mCategory;
     public ImageView mBusinessPhoto, mRatingView, mYelpLogo;
     View mRootView;
 
@@ -22,6 +22,7 @@ public class SearchViewHolder extends RecyclerView.ViewHolder {
         mCompanyName = (TextView) itemView.findViewById(R.id.search_business_name);
         mAddress = (TextView) itemView.findViewById(R.id.search_address);
         mReview = (TextView) itemView.findViewById(R.id.search_numbofreviews);
+        mCategory = (TextView) itemView.findViewById(R.id.search_category);
         mBusinessPhoto= (ImageView) itemView.findViewById(R.id.search_imageview);
         mRatingView = (ImageView) itemView.findViewById(R.id.search_fivestars);
         mYelpLogo= (ImageView) itemView.findViewById(R.id.search_yelplogo);
