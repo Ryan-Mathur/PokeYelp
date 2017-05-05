@@ -110,6 +110,20 @@ Actual: It shows a list of business have name with “Eataly” in city of New Y
 <img src="images/searchactivity business and location entered.png" width="250"/> 
 
 
+####LeaderBoard Activity
+Open the app, click on the leaderboard icon in the top right of the screen.
+Go to the leaderboard_activity.
+Expected: It supposed to see two button, which are “Sign in” button to login your google plus account, and “show leaderboards” button to see the leaderboards.
+Actual: It shows the “Sign in” button and ” show leaderboards” button.
+
+<img src="images/leaderboard activity1.png" width="250"/>
+
+Click the “SHOW LEADERBOARDS”, go to leaderboards activity that google provides.
+Expected: To see the users information.
+Actual It shows the users’ information for this game.
+<img src="images/leaderboard activity2.png" width="250"/>
+
+
 
 
 
