@@ -41,14 +41,13 @@ The user is able to move to the leaderboard, search, home and collection activit
 ####Leaderboard Activity
 The leaderboard is designed so that users can share how many pokemon they have caught with friends and other gamers. The user must sign-in with a Google Game Services account inorder to avail themselves of all leaderboard functionality. This is a third party website so the user is redirected to Google Game but it overlays ontop of the app so the user can press the back button to return to the app. As the user adds to the thier collection, the leaderboad updates with the total number of pokemon caught. Uninstalling the app wipes the collection clear. From the leaderboard you can connect and compare play to others. 
 
-<img src="images/" width="250"/>
+
 <img src="images/final detail1.jpg" width="250"/>
 <img src="images/final detail2.jpg" width="250"/>
 <img src="images/final capture.jpg" width="250"/>
 <img src="images/final leaderboard.jpg" width="250"/>
 <img src="images/final search.jpg" width="250"/>
 <img src="images/final share.jpg" width="250"/>
-<img src="images/" width="250"/>
 
 
 ####User Stories
