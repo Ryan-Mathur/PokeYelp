@@ -49,7 +49,6 @@ public class LoadingSearchActivityTest {
                 withId(R.id.the_search_button));
         appCompatButton2.perform(scrollTo(), click());
 
-
         ViewInteraction appCompatEditText2 = onView(
                 withId(R.id.search_by_name));
         appCompatEditText2.perform(scrollTo(), replaceText("bar"), closeSoftKeyboard());
