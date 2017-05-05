@@ -58,6 +58,7 @@ public class SearchActivity extends AppCompatActivity implements GoogleApiClient
     private EditText mCategoryInput;
     private EditText mLocationInput;
 
+
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
